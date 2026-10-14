@@ -4,30 +4,16 @@ Run:  .venv/bin/python scripts/check_connections.py
 Keys are read from .env and never printed.
 """
 import os
-import re
-from datetime import date, datetime, time, timedelta
-from zoneinfo import ZoneInfo
+import sys
+from datetime import date, datetime, timedelta
+from pathlib import Path
 
 import pandas as pd
 from dotenv import load_dotenv
 
-ET = ZoneInfo("America/New_York")
-OCC_RE = re.compile(r"^(?P<root>[A-Z]+)(?P<yymmdd>\d{6})(?P<cp>[CP])(?P<strike>\d{8})$")
-
-
-def parse_occ(symbol: str) -> dict:
-    """SPY261014C00580000 -> expiry 2026-10-14, call, strike 580.0"""
-    m = OCC_RE.match(symbol)
-    return {
-        "expiry": datetime.strptime(m["yymmdd"], "%y%m%d").date(),
-        "type": "call" if m["cp"] == "C" else "put",
-        "strike": int(m["strike"]) / 1000,
-    }
-
-
-def first_live_expiry_date(now: datetime) -> date:
-    """Today's options expire at 4:00 PM ET; after that, the earliest live expiry is tomorrow or later."""
-    return now.date() if now.time() < time(16, 0) else now.date() + timedelta(days=1)
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from core.expiry import ET, first_live_expiry_date  # noqa: E402
+from data.occ import parse_occ  # noqa: E402
 
 
 def check_alpaca(today: date) -> None:
