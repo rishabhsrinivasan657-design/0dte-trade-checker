@@ -1,0 +1,9 @@
+numpy>=1.26
+scipy>=1.11
+pandas>=2.1
+alpaca-py>=0.30
+yfinance>=0.2.50
+plotly>=5.18
+streamlit>=1.38
+python-dotenv>=1.0
+pytest>=8.0
