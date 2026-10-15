@@ -1,4 +1,4 @@
-"""Phase 4 live check: run the trade checker on one option from the live chain.
+"""Live check: run the trade checker + history check on one option from the live chain.
 
 Run:  .venv/bin/python scripts/check_trade.py call 772 [premium]
 """
@@ -9,8 +9,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from dotenv import load_dotenv
 
+from checker.history_check import history_check
 from checker.trade_check import check_trade
 from data.chain import load_market
+from data.history import daily_bars, intraday_bars
 
 if __name__ == "__main__":
     load_dotenv()
@@ -33,5 +35,16 @@ if __name__ == "__main__":
     print(f"                          if SPY doesn't move for {c.hours_ahead * 60:.0f} min: "
           f"${c.model_value:.2f} → ${c.value_later:.2f}  (−{c.loss_if_flat / c.model_value:.0%})")
     print(f"   Greeks: delta {c.delta:.2f}, gamma {c.gamma:.3f}")
-    for n in m.notes + c.notes:
+
+    today = m.as_of.date()
+    h = history_check(c, daily_bars(today), intraday_bars(today))
+    print(f"\n5. History: SPY needs {h.needed_itm_pct:+.2%} to the strike, {h.needed_profit_pct:+.2%} to breakeven,"
+          f" over the last {h.window_minutes:.0f} min of the session")
+    for r in (h.daily, h.intraday):
+        if r:
+            print(f"   {r.basis:8s} ({r.n_days} days, {r.first_day} → {r.last_day}): "
+                  f"finished ITM {r.itm:.0%} of days, past breakeven {r.profit:.0%}")
+    print(f"6. Verdict: market says {h.market_prob:.0%}, history ({h.basis}) says {h.hist_prob:.0%}"
+          f"  →  {h.verdict.upper()}")
+    for n in m.notes + c.notes + h.notes:
         print("note:", n)

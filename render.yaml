@@ -1,0 +1,16 @@
+# Render Blueprint: one free web service running the FastAPI app (API + static frontend).
+services:
+  - type: web
+    name: 0dte-trade-checker
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.9
+      - key: ALPACA_API_KEY
+        sync: false        # entered in the Render dashboard, never committed
+      - key: ALPACA_SECRET_KEY
+        sync: false

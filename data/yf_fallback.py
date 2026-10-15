@@ -8,8 +8,9 @@ from data.alpaca_client import CHAIN_COLUMNS
 from data.occ import parse_occ
 
 
-def get_spot(symbol: str = "SPY") -> float:
-    return float(yf.Ticker(symbol).fast_info["last_price"])
+def get_spot(symbol: str = "SPY") -> tuple[float, None]:
+    """Latest price (Yahoo doesn't tell us its time)."""
+    return float(yf.Ticker(symbol).fast_info["last_price"]), None
 
 
 def get_chain(expiry_from: date, spot: float, width: float = 15.0, symbol: str = "SPY") -> pd.DataFrame:

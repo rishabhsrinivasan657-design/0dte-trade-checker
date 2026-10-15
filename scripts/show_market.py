@@ -27,9 +27,9 @@ if __name__ == "__main__":
     for n in m.notes:
         print("note:", n)
 
-    em = expected_move(m.chain, m.spot)
+    em = expected_move(m.chain, m.spot, T, r)
     print(f"\nATM {em['atm_strike']:.0f} straddle = {em['call_mid']:.2f} call + {em['put_mid']:.2f} put "
-          f"= ${em['straddle']:.2f} ({em['move_pct']:.2%})")
+          f"= ${em['straddle']:.2f}  | ATM IV {em['atm_iv']:.1%} → expected move ±${em['move']:.2f} ({em['move_pct']:.2%})")
     print(f"Expected range by close: {em['low']:.2f} – {em['high']:.2f}   (1-sd move ≈ ${em['one_sd_move']:.2f})")
 
     print(f"\n{'strike':>7} {'type':>5} {'bid':>6} {'ask':>6} {'mid':>6} {'our IV':>7}")

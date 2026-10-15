@@ -4,7 +4,7 @@ Caveat: indicative quotes are derived from the market, not the official OPRA
 consolidated quote (that needs a paid subscription). Good for learning, not for execution.
 """
 import os
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 
 import pandas as pd
 from alpaca.data.enums import DataFeed, OptionsFeed
@@ -27,12 +27,16 @@ def _keys() -> tuple[str, str]:
     return key, secret
 
 
-def get_spot(symbol: str = "SPY") -> float:
-    """Last trade on the free IEX feed. IEX is one exchange, but for SPY the price is fine."""
+def get_spot(symbol: str = "SPY") -> tuple[float, datetime]:
+    """Last trade on the free IEX feed, and its time.
+
+    IEX is one exchange, so its "last trade" can be many minutes old even when SPY is active;
+    that's why data.chain prefers the price implied by the option quotes.
+    """
     trade = StockHistoricalDataClient(*_keys()).get_stock_latest_trade(
         StockLatestTradeRequest(symbol_or_symbols=symbol, feed=DataFeed.IEX)
-    )
-    return float(trade[symbol].price)
+    )[symbol]
+    return float(trade.price), trade.timestamp
 
 
 def get_chain(expiry_from: date, spot: float, width: float = 15.0, symbol: str = "SPY") -> pd.DataFrame:

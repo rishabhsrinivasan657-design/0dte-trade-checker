@@ -11,9 +11,10 @@ from core.black_scholes import bs_price, prob_itm
 from core.expiry import MINUTES_PER_YEAR
 from core.greeks import delta, gamma, theta
 from core.implied_vol import implied_vol
-from data.chain import MarketSnapshot, atm_strike, expected_move, option_row
+from data.chain import MarketSnapshot, expected_move, option_row
 
 HOURS_PER_YEAR = MINUTES_PER_YEAR / 60   # 8,760: theta is per year, we want per hour
+FINAL_MINUTES_WARNING = 15
 
 
 @dataclass
@@ -70,13 +71,13 @@ def check_trade(market: MarketSnapshot, option_type: str, strike: float,
     move_needed = breakeven - S
 
     # 2. Expected move
-    em = expected_move(chain, S)
+    em = expected_move(chain, S, T, r)
     move_vs_expected = abs(move_needed) / em["move"]
 
     # 3. Probabilities, using this option's own IV
     iv = implied_vol(row["mid"], S, strike, T, r, option_type)
     if isnan(iv):
-        iv = _atm_iv(market)
+        iv = em["atm_iv"]
         notes.append("This option's price is almost all intrinsic value, so its own IV can't be "
                      f"solved; using the ATM IV ({iv:.1%}) instead.")
     p_itm = prob_itm(S, strike, T, r, iv, option_type)
@@ -90,6 +91,10 @@ def check_trade(market: MarketSnapshot, option_type: str, strike: float,
     T_later = 0.0 if hours_ahead < 1.0 else T - hours_ahead / HOURS_PER_YEAR   # close comes first: exactly 0
     later = bs_price(S, strike, T_later, r, iv, option_type)
 
+    if minutes_left < FINAL_MINUTES_WARNING:
+        notes.append("Final minutes before the close: prices include risk the 4:00 PM clock doesn't "
+                     "count (e.g. after-hours moves before the exercise deadline), so implied vols "
+                     "jump and these numbers are least reliable.")
     if premium > row["ask"] + 1e-9:
         notes.append(f"Premium ${premium:.2f} is above the current ask ${row['ask']:.2f}.")
 
@@ -104,13 +109,3 @@ def check_trade(market: MarketSnapshot, option_type: str, strike: float,
         notes=notes,
     )
 
-
-def _atm_iv(market: MarketSnapshot) -> float:
-    """Average of the ATM call and put IVs: a fallback when an option's own IV isn't solvable."""
-    k = atm_strike(market.chain, market.spot)
-    ivs = [implied_vol(option_row(market.chain, k, cp)["mid"], market.spot, k, market.T, market.r, cp)
-           for cp in ("call", "put")]
-    ivs = [v for v in ivs if not isnan(v)]
-    if not ivs:
-        raise ValueError("can't solve any IV at the ATM strike")
-    return sum(ivs) / len(ivs)

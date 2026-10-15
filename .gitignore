@@ -19,3 +19,6 @@ venv/
 
 # Local data caches
 data/cache/
+
+# Claude Code local config
+.claude/

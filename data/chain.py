@@ -1,12 +1,13 @@
 """Load the live chain (Alpaca, falling back to yfinance), clean it, and get the expected move."""
 from dataclasses import dataclass, field
-from datetime import date, datetime
-from math import exp, pi, sqrt
+from datetime import date, datetime, timedelta
+from math import exp, isnan, pi, sqrt
 from statistics import median
 
 import pandas as pd
 
 from core.expiry import ET, first_live_expiry_date, years_to_expiry
+from core.implied_vol import implied_vol
 from data import alpaca_client, yf_fallback
 from data.rates import risk_free_rate
 
@@ -16,6 +17,8 @@ MAX_SPREAD_ABS = 0.10
 MAX_SPREAD_PCT = 0.25
 # Warn when the quoted SPY price and the price implied by the option quotes disagree by more than this
 SPOT_MISMATCH_WARN = 0.25
+# ...unless the quoted price is a last trade older than this (then a gap is expected, not news)
+STALE_TRADE = timedelta(minutes=5)
 
 
 @dataclass
@@ -37,12 +40,12 @@ def load_market(now: datetime | None = None, width: float = 15.0, symbol: str = 
     expiry_from = first_live_expiry_date(now)
     notes = []
     try:
-        spot = alpaca_client.get_spot(symbol)
+        spot, trade_time = alpaca_client.get_spot(symbol)
         raw = alpaca_client.get_chain(expiry_from, spot, width, symbol)
         source = "alpaca"
     except Exception as e:
         notes.append(f"Alpaca unavailable ({type(e).__name__}: {e}); using yfinance (~15 min delayed).")
-        spot = yf_fallback.get_spot(symbol)
+        spot, trade_time = yf_fallback.get_spot(symbol)
         raw = yf_fallback.get_chain(expiry_from, spot, width, symbol)
         source = "yfinance"
 
@@ -54,9 +57,10 @@ def load_market(now: datetime | None = None, width: float = 15.0, symbol: str = 
     expiry = raw["expiry"].iloc[0]
     T, r = years_to_expiry(now, expiry), risk_free_rate()
     implied = parity_spot(chain, spot, T, r)
-    if abs(implied - spot) > SPOT_MISMATCH_WARN:
-        notes.append(f"Option quotes imply SPY {implied:.2f} but last price is {spot:.2f} "
-                     f"(quotes are stale vs the stock); using {implied:.2f} so they stay consistent.")
+    stale_trade = trade_time is not None and now - trade_time > STALE_TRADE
+    if abs(implied - spot) > SPOT_MISMATCH_WARN and not stale_trade:
+        notes.append(f"Option prices imply SPY at {implied:.2f}, but its last trade was {spot:.2f} "
+                     f"(one of the two feeds is lagging). Using {implied:.2f} so the numbers stay consistent.")
     return MarketSnapshot(implied, spot, expiry, T, r, chain, source, now, notes)
 
 
@@ -107,24 +111,41 @@ def option_row(chain: pd.DataFrame, strike: float, option_type: str) -> pd.Serie
     return match.iloc[0]
 
 
-def expected_move(chain: pd.DataFrame, spot: float) -> dict:
-    """Market's expected move to expiry, from the ATM straddle (call mid + put mid).
+def atm_iv(chain: pd.DataFrame, spot: float, T: float, r: float) -> float:
+    """Average of the ATM call and put implied vols."""
+    k = atm_strike(chain, spot)
+    ivs = [implied_vol(option_row(chain, k, cp)["mid"], spot, k, T, r, cp) for cp in ("call", "put")]
+    ivs = [v for v in ivs if not isnan(v)]
+    if not ivs:
+        raise ValueError("can't solve any IV at the ATM strike")
+    return sum(ivs) / len(ivs)
 
-    The straddle ≈ the AVERAGE size of the move. A 1-standard-deviation move is
-    about sqrt(pi/2) ≈ 1.25x bigger (that's the normal-distribution relationship).
+
+def expected_move(chain: pd.DataFrame, spot: float, T: float, r: float) -> dict:
+    """Market's expected move to expiry, from the ATM straddle.
+
+    The raw straddle (call mid + put mid) ≈ the AVERAGE size of the move, but only when the
+    strike sits exactly at spot. If SPY is between strikes, one leg is partly in the money and
+    the straddle includes that intrinsic value, which isn't "expected movement" (it matters most
+    near the close). So we take the straddle's implied vol and re-centre it on spot:
+        move ≈ sqrt(2/pi) * S * sigma * sqrt(T)       (≈ 0.8 * S * sigma * sqrt(T))
+    A 1-standard-deviation move is S * sigma * sqrt(T), about 1.25x bigger.
     """
     k = atm_strike(chain, spot)
     call_mid = option_row(chain, k, "call")["mid"]
     put_mid = option_row(chain, k, "put")["mid"]
-    move = call_mid + put_mid
+    iv = atm_iv(chain, spot, T, r)
+    one_sd = spot * iv * sqrt(T)
+    move = sqrt(2 / pi) * one_sd
     return {
         "atm_strike": k,
         "call_mid": call_mid,
         "put_mid": put_mid,
-        "straddle": move,
+        "straddle": call_mid + put_mid,
+        "atm_iv": iv,
         "move": move,
         "move_pct": move / spot,
         "low": spot - move,
         "high": spot + move,
-        "one_sd_move": move * sqrt(pi / 2),
+        "one_sd_move": one_sd,
     }

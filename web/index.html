@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>0DTE Trade Checker</title>
+  <meta name="description" content="Check a same-day SPY option before you buy: breakeven, expected move, odds, time decay, and how often history agreed.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%232a78d6'/><path d='M8 21l5-6 4 3 7-9' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    try { const t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="/" aria-label="0DTE Trade Checker home">
+        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8"/><path d="M8 21l5-6 4 3 7-9"/></svg>
+        <span>0DTE Trade Checker</span>
+      </a>
+      <div class="market-pill" id="market-pill" aria-live="polite">
+        <span class="dot" id="market-dot"></span>
+        <span id="market-status">Loading market…</span>
+      </div>
+      <div class="topbar-actions">
+        <button class="icon-btn" id="refresh" type="button" aria-label="Refresh market data" title="Refresh">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.34-5.66M20 4v5h-5"/></svg>
+        </button>
+        <button class="icon-btn" id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Theme">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- ============ INPUT ============ -->
+    <aside class="panel input-panel" aria-labelledby="input-title">
+      <h1 id="input-title" class="panel-title">Check a trade</h1>
+      <p class="panel-sub">Pick a SPY option that expires <span id="expiry-word">today</span>. We'll show what has to happen for it to pay off.</p>
+
+      <form id="trade-form" novalidate>
+        <fieldset class="field">
+          <legend class="label">Direction</legend>
+          <div class="segmented" role="radiogroup">
+            <label><input type="radio" name="type" value="call" checked><span><b>Call</b><small>SPY goes up</small></span></label>
+            <label><input type="radio" name="type" value="put"><span><b>Put</b><small>SPY goes down</small></span></label>
+          </div>
+        </fieldset>
+
+        <div class="field">
+          <label class="label" for="strike">Strike</label>
+          <div class="select-wrap">
+            <select id="strike" disabled><option>Loading…</option></select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label" for="premium">Premium you'd pay</label>
+          <div class="money-input">
+            <span aria-hidden="true">$</span>
+            <input id="premium" type="number" inputmode="decimal" min="0.01" step="0.01" placeholder="0.00">
+          </div>
+          <div class="quote-chips" id="quote-chips" aria-label="Use a quoted price"></div>
+          <p class="hint">Filled with the <b>ask</b>, what a buyer actually pays. Edit it if you'd get a better price.</p>
+        </div>
+
+        <button class="btn-primary" id="submit" type="submit">Check this trade</button>
+      </form>
+
+      <div class="mini-market" id="mini-market" hidden>
+        <div class="mini-row"><span>Market expects today</span><b id="mini-move">—</b></div>
+        <div class="mini-row"><span>Likely range by close</span><b id="mini-range">—</b></div>
+      </div>
+    </aside>
+
+    <!-- ============ RESULTS ============ -->
+    <section class="results" id="results" aria-live="polite" aria-busy="true">
+      <div id="notes" class="notes"></div>
+
+      <div class="empty-state" id="empty-state">
+        <div class="skeleton tall"></div>
+        <div class="tiles"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div>
+      </div>
+
+      <div id="result-body" hidden>
+        <!-- Verdict -->
+        <article class="card verdict-card" id="verdict-card">
+          <div class="verdict-head">
+            <span class="badge" id="verdict-badge"></span>
+            <span class="verdict-option" id="verdict-option"></span>
+          </div>
+          <h2 class="verdict-line" id="verdict-line"></h2>
+          <div class="compare" id="compare"></div>
+          <p class="fineprint" id="verdict-fine"></p>
+        </article>
+
+        <!-- Price map -->
+        <article class="card">
+          <div class="card-head">
+            <h3>Where SPY needs to go</h3>
+            <p class="card-sub" id="map-sub"></p>
+          </div>
+          <div class="price-map" id="price-map" role="img"></div>
+        </article>
+
+        <!-- Stat tiles -->
+        <div class="tiles" id="tiles"></div>
+
+        <!-- History -->
+        <article class="card">
+          <div class="card-head">
+            <h3>Did history agree?</h3>
+            <p class="card-sub" id="history-sub"></p>
+          </div>
+          <div class="table-wrap"><table class="data-table" id="history-table"></table></div>
+        </article>
+
+        <!-- Greeks -->
+        <article class="card">
+          <div class="card-head">
+            <h3>Why 0DTE gets riskier as the close gets closer</h3>
+            <p class="card-sub" id="greeks-sub"></p>
+          </div>
+          <div class="legend" id="greeks-legend"></div>
+          <div class="charts">
+            <figure class="chart" id="chart-gamma"><figcaption><b>Gamma</b> · how fast your delta swings per $1 SPY move</figcaption></figure>
+            <figure class="chart" id="chart-theta"><figcaption><b>Theta</b> · dollars lost per hour if SPY sits still</figcaption></figure>
+          </div>
+        </article>
+
+        <!-- Explainer -->
+        <article class="card explainer">
+          <h3>How each number is worked out</h3>
+          <details>
+            <summary>Breakeven</summary>
+            <p>Strike + premium for a call, strike − premium for a put. At 4:00 PM the option is worth exactly how far SPY is past the strike, so you need SPY past the breakeven just to get your money back.</p>
+          </details>
+          <details>
+            <summary>Expected move</summary>
+            <p>From the at-the-money <i>straddle</i> (call + put at the strike nearest SPY). A straddle pays off on a move in either direction, so its price is the market's estimate of how big today's move will be, not which way.</p>
+          </details>
+          <details>
+            <summary>Chance of finishing in the money / of profit</summary>
+            <p>Black-Scholes N(d₂), using this option's own implied volatility (solved from its mid price). "Chance of profit" is the same calculation measured at the breakeven. These are the market's <i>risk-neutral</i> odds, not a guarantee.</p>
+          </details>
+          <details>
+            <summary>Time decay</summary>
+            <p>Theta converted from per-year to per-hour. Because decay speeds up near the close, we also re-price the option one hour later (or at the close) with SPY unchanged.</p>
+          </details>
+          <details>
+            <summary>History check &amp; verdict</summary>
+            <p>How often SPY actually moved past the strike in the same window. The intraday version uses the last ~60 days of 5-minute bars from this time of day to the close; the daily version uses ~3 years of open-to-close moves, scaled to the time left with the square-root-of-time rule. If history beat the market's odds by more than 5 points, it's <b>Cheap</b>; if it fell short by more than 5, <b>Expensive</b>.</p>
+          </details>
+          <details>
+            <summary>Limitations</summary>
+            <ul>
+              <li>Free option quotes are <i>indicative</i> (or ~15 min delayed from Yahoo), not the official OPRA feed.</li>
+              <li>SPY options are American-style; Black-Scholes is European. At 0DTE the difference is tiny.</li>
+              <li>Black-Scholes assumes one constant volatility; the real market has a volatility smile.</li>
+              <li>History doesn't know about today's news (Fed, CPI, earnings). Past ≠ future.</li>
+              <li>Options usually price above history on purpose (the volatility risk premium), so "Expensive" is common.</li>
+            </ul>
+          </details>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p><b>Educational tool, not financial advice.</b> Quotes may be delayed or indicative. 0DTE options can lose 100% of their value in hours.</p>
+  </footer>
+
+  <div class="tooltip" id="tooltip" role="tooltip" hidden></div>
+  <script src="app.js" type="module"></script>
+</body>
+</html>

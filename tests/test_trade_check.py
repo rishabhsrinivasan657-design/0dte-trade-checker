@@ -83,6 +83,11 @@ def test_last_minutes_look_ahead_stops_at_close():
     assert c.loss_if_flat == pytest.approx(c.model_value)
 
 
+def test_final_minutes_warning(market):
+    assert any("Final minutes" in n for n in check_trade(synthetic_market(minutes=10), "call", 770).notes)
+    assert not any("Final minutes" in n for n in check_trade(market, "call", 770).notes)
+
+
 def test_deep_itm_falls_back_to_atm_iv():
     # 750 call with SPY at 770 and 200 min left: essentially pure intrinsic, IV unsolvable
     m = synthetic_market(strikes=[750, *range(765, 776)])

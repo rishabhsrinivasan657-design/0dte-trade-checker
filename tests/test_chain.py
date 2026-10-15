@@ -5,6 +5,7 @@ from math import exp, pi, sqrt
 import pandas as pd
 import pytest
 
+from core.black_scholes import bs_price
 from data.chain import atm_strike, clean_chain, expected_move, parity_spot
 from data.occ import parse_occ
 
@@ -58,13 +59,36 @@ def test_atm_tie_picks_lower_strike():
     assert atm_strike(clean_chain(RAW), 777.5) == 777.0
 
 
-def test_expected_move():
-    em = expected_move(clean_chain(RAW), 778.0)
-    assert em["straddle"] == pytest.approx(2.13 + 1.92)
-    assert em["low"] == pytest.approx(778.0 - 4.05)
-    assert em["high"] == pytest.approx(778.0 + 4.05)
-    assert em["move_pct"] == pytest.approx(4.05 / 778.0)
-    assert em["one_sd_move"] == pytest.approx(4.05 * sqrt(pi / 2))
+def bs_chain(spot, strikes, T, r, sigma):
+    rows = []
+    for k in strikes:
+        for cp in ("call", "put"):
+            fair = bs_price(spot, k, T, r, sigma, cp)
+            rows.append((cp, float(k), fair - 0.005, fair + 0.005))
+    return clean_chain(make_chain(rows))
+
+
+def test_expected_move_spot_on_strike():
+    # SPY exactly at 770: straddle and the IV-based move agree (≈ 0.8 * S * sigma * sqrt(T))
+    T, r, sigma = 200 / 525_600, 0.0, 0.18
+    em = expected_move(bs_chain(770.0, range(765, 776), T, r, sigma), 770.0, T, r)
+    assert em["atm_strike"] == 770.0
+    assert em["atm_iv"] == pytest.approx(sigma, rel=1e-6)
+    assert em["one_sd_move"] == pytest.approx(770 * sigma * sqrt(T))
+    assert em["move"] == pytest.approx(sqrt(2 / pi) * em["one_sd_move"])
+    assert em["move"] == pytest.approx(em["straddle"], rel=0.01)
+    assert em["low"] == pytest.approx(770 - em["move"])
+    assert em["high"] == pytest.approx(770 + em["move"])
+
+
+def test_expected_move_ignores_intrinsic_between_strikes():
+    # 5 min left, SPY 768.72: the 769 put is $0.28 in the money, so the raw straddle overstates the move
+    T, r, sigma = 5 / 525_600, 0.0, 0.18
+    em = expected_move(bs_chain(768.72, range(765, 773), T, r, sigma), 768.72, T, r)
+    assert em["atm_strike"] == 769.0
+    assert em["straddle"] > 0.28
+    assert em["move"] == pytest.approx(sqrt(2 / pi) * 768.72 * sigma * sqrt(T), rel=1e-4)
+    assert em["move"] < 0.85 * em["straddle"]          # raw straddle overstates by ~20% here
 
 
 def test_parse_occ():
