@@ -3,7 +3,7 @@
 
 import { renderWhatIf } from "./whatif.js";
 import { drawSpyChart, renderTicker } from "./spychart.js";
-import { $, el, svgEl, icon, ICONS, money, signedMoney, pct, signedPct, duration, expiryLabel, setupThemeToggle } from "./common.js";
+import { $, el, svgEl, icon, ICONS, money, signedMoney, pct, signedPct, duration, expiryLabel, setupThemeToggle, odds, cents, breakevenSub } from "./common.js";
 
 const state = { market: null, spy: null, type: "call", strike: null, premiumEdited: false, lastCheck: null, timer: null, research: null };
 const REFRESH_MS = 30_000;
@@ -196,8 +196,8 @@ function renderDecision({ decision: d, trade: t, evidence: ev }) {
   const num = (k, v, sub) => el("div", { class: "key-number" }, el("div", { class: "k" }, k), el("div", { class: "v" }, v), el("div", { class: "s" }, sub));
   $("key-numbers").replaceChildren(
     num("Cost", money(t.premium * 100, 0), "per contract"),
-    num("Breakeven", money(t.breakeven), `SPY ${signedMoney(t.move_needed)}`),
-    num("Chance of profit", pct(chance), ev ? `market says ${pct(t.prob_profit)}` : ""),
+    num("Breakeven", money(t.breakeven), breakevenSub(t)),
+    num("Chance of profit", odds(chance), ev ? `market says ${odds(t.prob_profit)}` : ""),
     num("If SPY stalls", `−${money(flatLoss, 0)}`, `next ${duration(t.hours_ahead * 60)}`),
   );
 
@@ -255,7 +255,7 @@ function renderCompare(data) {
       el("td", {}, `${r.strike}`, r.strike === atm ? el("span", { class: "used-tag" }, "ATM") : null, current ? el("span", { class: "used-tag" }, "selected") : null),
       el("td", { class: "num" }, money(r.cost, 0)),
       el("td", { class: "num" }, money(r.breakeven)),
-      el("td", { class: "num" }, pct(r.prob_profit)),
+      el("td", { class: "num" }, odds(r.prob_profit)),
       el("td", {}, r.rating ? el("span", { class: `rating-chip ${r.rating}`, title: r.label }, SHORT_LABEL[r.rating] ?? r.label) : "—"));
     const pick = () => {
       state.strike = r.strike;
@@ -304,7 +304,6 @@ function renderVerdict({ trade: t, history: h }) {
 }
 
 // ---------- trades like this one ----------
-const cents = (r) => `${r < 0 ? "−" : "+"}${Math.abs(r * 100).toFixed(0)}¢`;
 
 function renderEvidence({ evidence: ev, trade: t }) {
   const card = $("similar-card");

@@ -55,3 +55,14 @@ export function setupThemeToggle() {
     try { localStorage.setItem("theme", root.dataset.theme); } catch (e) {}
   });
 }
+
+// Probabilities never show as certain: ">99%" / "<1%"
+export const odds = (p) => (p >= 0.995 ? ">99%" : p > 0 && p < 0.005 ? "<1%" : pct(p));
+// Cents per $1, without a "−0¢"
+export const cents = (r) => { const c = Math.round(Math.abs(r) * 100); return c === 0 ? "0¢" : `${r < 0 ? "−" : "+"}${c}¢`; };
+// Breakeven line: how far SPY must go, or how much room is left if you're already past it
+export function breakevenSub(t) {
+  const past = t.option_type === "call" ? t.spot >= t.breakeven : t.spot <= t.breakeven;
+  const gap = Math.abs(t.breakeven - t.spot);
+  return past ? `$${gap.toFixed(2)} cushion` : `SPY needs ${t.move_needed >= 0 ? "+" : "−"}$${gap.toFixed(2)}`;
+}

@@ -1,5 +1,5 @@
 // Position tracker: follows one option you bought, every 15 seconds.
-import { $, el, svgEl, icon, ICONS, money, pct, duration, expiryLabel, setupThemeToggle } from "./common.js";
+import { $, el, svgEl, icon, ICONS, money, pct, duration, expiryLabel, setupThemeToggle, odds, cents, breakevenSub } from "./common.js";
 import { renderWhatIf } from "./whatif.js";
 import { drawSpyChart, renderTicker } from "./spychart.js";
 
@@ -9,7 +9,6 @@ const REFRESH_MS = 15_000;
 const STORE = "position-v1";
 const state = { market: null, spy: null, pos: null, timer: null, history: [], last: null };
 
-const cents = (r) => `${r < 0 ? "−" : "+"}${Math.abs(r * 100).toFixed(0)}¢`;
 const signedMoney0 = (v) => `${v >= 0 ? "+" : "−"}${money(Math.abs(v), 0)}`;
 const store = {
   get() { try { return JSON.parse(localStorage.getItem(STORE)); } catch (e) { return null; } },
@@ -162,8 +161,8 @@ function renderTiles(t, ev, p) {
   const mult = 100 * p.contracts;
   const stat = (k, v, sub) => el("div", { class: "pnl-stat" }, el("div", { class: "k" }, k), el("div", { class: "v" }, v), el("div", { class: "s" }, sub));
   $("pnl-stats").replaceChildren(
-    stat("Breakeven", money(t.breakeven), `SPY ${t.move_needed >= 0 ? "+" : "−"}${money(Math.abs(t.move_needed))}`),
-    stat("Chance of profit", pct(ev ? ev.realistic_profit : t.prob_profit), ""),
+    stat("Breakeven", money(t.breakeven), breakevenSub(t)),
+    stat("Chance of profit", odds(ev ? ev.realistic_profit : t.prob_profit), ""),
     stat("Time decay", `${money(t.theta_per_hour * mult)}/hr`, ""),
     stat("Time left", duration(t.minutes_left), ""),
   );
@@ -173,7 +172,7 @@ function renderTiles(t, ev, p) {
     ...row("Position value", money(t.bid * mult, 0), `paid ${money(p.paid * mult, 0)}`),
     ...row("Implied vol", pct(t.iv, 1), `ATM ${pct(t.expected.atm_iv, 1)}`),
     ...row("Delta / Gamma", `${t.delta.toFixed(2)} / ${t.gamma.toFixed(3)}`),
-    ...row("Market odds", `${pct(t.prob_itm)} in the money`),
+    ...row("Market odds", `${odds(t.prob_itm)} in the money`),
   );
 }
 
