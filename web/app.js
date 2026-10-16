@@ -1,51 +1,12 @@
 // 0DTE Trade Checker frontend. Talks to /api/market and /api/check (app.py).
 // All text from the server is inserted with textContent (never innerHTML).
 
-const $ = (id) => document.getElementById(id);
-const state = { market: null, type: "call", strike: null, premiumEdited: false, lastCheck: null, timer: null };
+import { renderWhatIf } from "./whatif.js";
+import { drawSpyChart, renderTicker } from "./spychart.js";
+import { $, el, svgEl, icon, ICONS, money, signedMoney, pct, signedPct, duration, expiryLabel, setupThemeToggle } from "./common.js";
+
+const state = { market: null, spy: null, type: "call", strike: null, premiumEdited: false, lastCheck: null, timer: null, research: null };
 const REFRESH_MS = 30_000;
-
-// ---------- small helpers ----------
-function el(tag, props = {}, ...children) {
-  const node = document.createElement(tag);
-  for (const [k, v] of Object.entries(props)) {
-    if (k === "class") node.className = v;
-    else if (k === "style") Object.assign(node.style, v);
-    else if (k.startsWith("on")) node.addEventListener(k.slice(2), v);
-    else if (v !== false && v != null) node.setAttribute(k, v === true ? "" : v);
-  }
-  for (const c of children.flat()) if (c != null) node.append(c instanceof Node ? c : document.createTextNode(String(c)));
-  return node;
-}
-const svgEl = (tag, attrs = {}) => {
-  const n = document.createElementNS("http://www.w3.org/2000/svg", tag);
-  for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v);
-  return n;
-};
-const icon = (paths) => {
-  const s = svgEl("svg", { viewBox: "0 0 24 24", "aria-hidden": "true" });
-  for (const d of paths) s.append(svgEl("path", { d }));
-  return s;
-};
-const ICONS = {
-  cheap: ["M5 12l5 5 9-10"],
-  fair: ["M6 9h12", "M6 15h12"],
-  expensive: ["M12 7v6", "M12 17h.01", "M10.3 3.9L2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"],
-  info: ["M12 16v-4", "M12 8h.01", "M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"],
-};
-
-const money = (v, d = 2) => (v < 0 ? "−$" : "$") + Math.abs(v).toFixed(d);
-const signedMoney = (v) => (v >= 0 ? "+" : "−") + "$" + Math.abs(v).toFixed(2);
-const pct = (v, d = 0) => (v * 100).toFixed(d) + "%";
-const signedPct = (v, d = 2) => (v >= 0 ? "+" : "−") + Math.abs(v * 100).toFixed(d) + "%";
-const duration = (min) => {
-  min = Math.round(min);
-  if (min < 60) return `${min}m`;
-  const h = Math.floor(min / 60), m = min % 60;
-  return m ? `${h}h ${m}m` : `${h}h`;
-};
-const expiryLabel = (iso) =>
-  new Date(iso + "T12:00:00").toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
 
 async function api(path) {
   const res = await fetch(path, { headers: { Accept: "application/json" } });
@@ -62,10 +23,10 @@ async function loadMarket({ silent = false } = {}) {
     state.market = await api("/api/market");
     renderMarket();
     populateStrikes();
-    await runCheck();
+    await Promise.all([runCheck(), loadSpy()]);
   } catch (err) {
     if (!silent) showError(err.message);
-    $("market-status").textContent = "Market data unavailable";
+    $("tk-last").textContent = "unavailable";
   } finally {
     btn.classList.remove("spinning");
     scheduleRefresh();
@@ -81,22 +42,27 @@ function isToday(m) { return m.minutes_left <= 390; }
 
 function renderMarket() {
   const m = state.market;
-  const status = $("market-status");
-  status.replaceChildren();
-  $("market-dot").classList.toggle("live", m.market_open);
-  const src = m.source === "alpaca" ? "Alpaca" : "Yahoo (delayed)";
-  if (m.market_open) {
-    status.append("SPY ", el("b", {}, money(m.spot)), ` · ${duration(m.minutes_left)}`,
-      el("span", { class: "pill-extra" }, ` to close · ${src}`));
-  } else {
-    status.append(el("span", { class: "pill-extra" }, "Market closed · "), "SPY ", el("b", {}, money(m.spot)),
-      ` · expires ${expiryLabel(m.expiry)}`);
+  renderTicker(m, state.spy);
+  $("expiry-word").textContent = isToday(m) ? "today" : expiryLabel(m.expiry);
+}
+
+async function loadSpy() {
+  try {
+    state.spy = await api("/api/spy");
+  } catch (e) {
+    state.spy = null;
   }
-  $("expiry-word").textContent = isToday(m) ? "today" : `on ${expiryLabel(m.expiry)}`;
-  const em = m.expected;
-  $("mini-market").hidden = false;
-  $("mini-move").textContent = `±${money(em.move)} (${pct(em.move_pct, 2)})`;
-  $("mini-range").textContent = `${money(em.low)} – ${money(em.high)}`;
+  renderTicker(state.market, state.spy);
+  drawChart();
+}
+
+function drawChart() {
+  const t = state.lastCheck?.trade;
+  const lines = t ? [{ price: t.strike, label: "Strike", kind: "strike" }, { price: t.breakeven, label: "Breakeven", kind: "breakeven" }] : [];
+  const spy = state.spy;
+  $("live-chip").hidden = !spy?.live;
+  $("chart-sub").textContent = spy ? (spy.live ? "5-min" : `Last session · ${expiryLabel(spy.date)}`) : "Price data unavailable";
+  drawSpyChart($("spy-chart"), spy, { lines });
 }
 
 function quotesFor(type) { return state.market?.quotes[type] ?? []; }
@@ -105,7 +71,7 @@ function populateStrikes() {
   const quotes = quotesFor(state.type);
   const select = $("strike");
   const spot = state.market.spot;
-  const near = quotes.filter((q) => Math.abs(q.strike - spot) <= 12);
+  const near = quotes.filter((q) => Math.abs(q.strike - spot) <= 8);   // same window as /api/scan
   const list = near.length ? near : quotes;
   if (!list.some((q) => q.strike === state.strike)) {
     // default: first strike just out of the money (the most common 0DTE buy)
@@ -124,7 +90,12 @@ function populateStrikes() {
   syncPremium();
 }
 
-function currentQuote() { return quotesFor(state.type).find((q) => q.strike === state.strike); }
+function currentQuote() {
+  // Prefer the quote from the latest check (fresher than the option list loaded with the page)
+  const live = state.liveQuote;
+  if (live && live.type === state.type && live.strike === state.strike) return live;
+  return quotesFor(state.type).find((q) => q.strike === state.strike);
+}
 
 function syncPremium() {
   const q = currentQuote();
@@ -151,7 +122,7 @@ async function runCheck() {
   const premium = Number($("premium").value);
   if (state.premiumEdited && premium > 0) params.set("premium", premium.toFixed(2));
   const results = $("results");
-  results.classList.add("loading");
+  results.classList.add("loading");   // .center.loading dims the chart + decision while refreshing
   results.setAttribute("aria-busy", "true");
   $("submit").disabled = true;
   try {
@@ -180,21 +151,133 @@ function renderNotes(notes) {
 }
 
 function render(data) {
+  const t = data.trade;
+  state.liveQuote = { type: t.option_type, strike: t.strike, bid: t.bid, mid: t.mid, ask: t.ask };
+  syncPremium();                       // premium box + chips now match the prices this analysis used
   $("empty-state").hidden = true;
+  $("decision-card").hidden = false;
   $("result-body").hidden = false;
   renderNotes(data.notes);
+  renderDecision(data);
+  loadCompare();
   renderVerdict(data);
-  renderPriceMap(data.trade);
+  renderEvidence(data);
+  drawChart();
+  renderWhatIf($("whatif"), data.scenarios, {
+    caption: `1 contract at ${money(data.trade.premium)} · IV held at ${pct(data.scenarios.iv, 1)}`,
+  });
   renderTiles(data.trade);
+  renderModel(data);
   renderHistory(data);
   renderGreeks(data);
 }
 
-// ---------- verdict ----------
+// ---------- decision (the bottom line) ----------
+const RATING_ICON = { avoid: ICONS.expensive, poor: ICONS.info, typical: ICONS.fair };
+const zGroup = (z) => z < 0 ? "in the money" : z < 0.5 ? "near the money (0–0.5 moves out)" : "far out of the money (0.5+ moves)";
+
+function renderDecision({ decision: d, trade: t, evidence: ev }) {
+  const badge = $("rating");
+  const key = d.available ? d.rating : "unrated";
+  badge.className = `rating ${key}`;
+  badge.replaceChildren(icon(d.available ? RATING_ICON[key] : ICONS.info), d.available ? d.label : "Not rated");
+  $("decision-option").textContent = `${t.option_type.toUpperCase()} ${t.strike} @ ${money(t.premium)}`;
+
+  const g = d.group;
+  const c = g ? cents(g.return_per_dollar) : "";
+  $("decision-line").textContent = !d.available ? d.why_unavailable
+    : d.override ? d.override
+    : key === "avoid" ? `Similar trades lost ${c.slice(1)} per $1 and won ${pct(g.win_rate)} of the time.`
+    : key === "poor" ? `Similar trades lost ${c.slice(1)} per $1 and won ${pct(g.win_rate)} of the time.`
+    : `An average 0DTE trade: ${c} per $1, won ${pct(g.win_rate)} of the time.`;
+
+  const chance = ev ? ev.realistic_profit : t.prob_profit;
+  const flatLoss = t.loss_if_flat * 100;
+  const num = (k, v, sub) => el("div", { class: "key-number" }, el("div", { class: "k" }, k), el("div", { class: "v" }, v), el("div", { class: "s" }, sub));
+  $("key-numbers").replaceChildren(
+    num("Cost", money(t.premium * 100, 0), "per contract"),
+    num("Breakeven", money(t.breakeven), `SPY ${signedMoney(t.move_needed)}`),
+    num("Chance of profit", pct(chance), ev ? `market says ${pct(t.prob_profit)}` : ""),
+    num("If SPY stalls", `−${money(flatLoss, 0)}`, `next ${duration(t.hours_ahead * 60)}`),
+  );
+
+  $("why-list").replaceChildren(...d.reasons.map((r) => el("li", { class: `why-${r.tone}` },
+    icon(r.tone === "bad" ? ICONS.expensive : r.tone === "good" ? ICONS.cheap : ICONS.info), el("span", {}, r.text))));
+
+  // exit tip for options like this one, from the exit-rule research
+  const rules = (ev?.exit_rules_by_group ?? []).filter((r) => r.group === zGroup(d.z));
+  const best = [...rules].sort((a, b) => b.return_per_dollar - a.return_per_dollar)[0];
+  const hold = rules.find((r) => r.rule === "hold");
+  const trackHref = `track.html?${new URLSearchParams({ type: t.option_type, strike: t.strike, paid: t.premium.toFixed(2) })}`;
+  $("if-buy").replaceChildren(
+    el("div", {}, el("b", {}, "Exit tip: "),
+      best && hold && best.rule !== "hold"
+        ? `${best.label} (${cents(best.return_per_dollar)} vs ${cents(hold.return_per_dollar)} holding)`
+        : "track it to see when to get out"),
+    el("a", { class: "btn-secondary", href: trackHref }, "Track this position →"));
+
+  $("decision-fine").textContent = d.available && d.missing?.length
+    ? `Rated without ${d.missing.map((m) => m === "ml_forecast" ? "the ML forecast" : "history").join(" or ")} (unavailable right now).`
+    : "";
+}
+
+const scanCache = {};
+const SHORT_LABEL = { avoid: "Avoid", poor: "Poor odds", typical: "Typical" };
+async function loadCompare() {
+  const type = state.type;
+  const cached = scanCache[type];
+  if (cached && Date.now() - cached.at < 30_000) return renderCompare(cached.data);
+  try {
+    const data = await api(`/api/scan?type=${type}`);
+    scanCache[type] = { at: Date.now(), data };
+    if (type === state.type) renderCompare(data);
+  } catch (e) {
+    $("compare-sub").textContent = "Couldn't load strikes.";
+  }
+}
+
+function renderCompare(data) {
+  const t = state.lastCheck?.trade;
+  // the scan has fresher asks than the list loaded with the page: refresh the dropdown labels
+  for (const r of data.rows) {
+    const opt = [...$("strike").options].find((o) => Number(o.value) === r.strike);
+    if (opt) opt.textContent = `${r.strike}${r.strike === state.market?.expected?.atm_strike ? " · ATM" : ""}  —  ask ${money(r.ask)}`;
+  }
+  $("compare-title").textContent = `${data.type === "call" ? "Calls" : "Puts"} near SPY`;
+  $("compare-sub").textContent = "Click a row to check it";
+  const atm = state.market?.expected?.atm_strike;
+  const head = el("thead", {}, el("tr", {}, el("th", {}, "Strike"), el("th", { class: "num" }, "Cost"),
+    el("th", { class: "num" }, "Breakeven"), el("th", { class: "num" }, "Profit odds"), el("th", {}, "Rating")));
+  const body = el("tbody", {}, ...data.rows.map((r) => {
+    const current = t && r.strike === t.strike;
+    const tr = el("tr", { class: `pick${current ? " current" : ""}`, tabindex: "0", role: "button",
+      "aria-label": `Check the ${r.strike} ${data.type}: ${r.label ?? "not rated"}` },
+      el("td", {}, `${r.strike}`, r.strike === atm ? el("span", { class: "used-tag" }, "ATM") : null, current ? el("span", { class: "used-tag" }, "selected") : null),
+      el("td", { class: "num" }, money(r.cost, 0)),
+      el("td", { class: "num" }, money(r.breakeven)),
+      el("td", { class: "num" }, pct(r.prob_profit)),
+      el("td", {}, r.rating ? el("span", { class: `rating-chip ${r.rating}`, title: r.label }, SHORT_LABEL[r.rating] ?? r.label) : "—"));
+    const pick = () => {
+      state.strike = r.strike;
+      state.premiumEdited = false;
+      $("strike").value = String(r.strike);
+      syncPremium();
+      runCheck();
+      const card = $("decision-card").getBoundingClientRect();
+      if (card.top < 60 || card.top > innerHeight * 0.6) $("decision-card").scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+    tr.addEventListener("click", pick);
+    tr.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(); } });
+    return tr;
+  }));
+  $("compare-table").replaceChildren(head, body);
+}
+
+// ---------- history check ----------
 const VERDICT_TEXT = {
-  Cheap: "History says SPY made this move more often than the price implies.",
-  Fair: "The price is roughly in line with how SPY has actually moved.",
-  Expensive: "You'd be paying for a move SPY rarely made in this window.",
+  Cheap: "Happened more often than priced.",
+  Fair: "In line with recent history.",
+  Expensive: "Happened less often than priced.",
 };
 
 function renderVerdict({ trade: t, history: h }) {
@@ -203,15 +286,13 @@ function renderVerdict({ trade: t, history: h }) {
   const key = v ? v.toLowerCase() : "fair";
   badge.className = `badge ${key}`;
   badge.replaceChildren(icon(ICONS[key]), v ?? "No verdict");
-  $("verdict-option").textContent =
-    `${t.option_type.toUpperCase()} ${t.strike} · pay ${money(t.premium)} · SPY ${money(t.spot)}`;
-  $("verdict-line").textContent = v ? VERDICT_TEXT[v] : "Historical data is unavailable right now, so there's no verdict.";
+  $("verdict-option").textContent = "";
+  $("verdict-fine").dataset.headline = v ? VERDICT_TEXT[v] : "Historical data is unavailable right now.";
 
-  const rows = [{ label: "Market's odds it finishes in the money", value: t.prob_itm, color: "var(--series-1)" }];
+  const rows = [{ label: "Market's odds (in the money)", value: t.prob_itm, color: "var(--series-1)" }];
   if (h) {
     const used = h.basis === "intraday" ? h.intraday : h.daily;
-    const what = h.basis === "intraday" ? `${used.n_days} recent days, same time window` : `${used.n_days} days, scaled to time left`;
-    rows.push({ label: `How often it happened (${what})`, value: h.hist_prob, color: "var(--series-2)" });
+    rows.push({ label: `Happened (last ${used.n_days} days)`, value: h.hist_prob, color: "var(--series-2)" });
   }
   const max = Math.max(0.05, ...rows.map((r) => r.value));
   $("compare").replaceChildren(...rows.map((r) => el("div", { class: "compare-row" },
@@ -219,117 +300,105 @@ function renderVerdict({ trade: t, history: h }) {
     el("div", { class: "track" }, el("div", { class: "fill", style: { width: `${(r.value / max) * 100}%`, background: r.color } })),
     el("div", { class: "compare-value" }, pct(r.value)),
   )));
-  $("verdict-fine").textContent = h
-    ? `"Cheap" or "Expensive" means history differs from the market by more than 5 percentage points. ` +
-      `Not a prediction: history can't see today's news.`
-    : "";
+  $("verdict-fine").textContent = h ? VERDICT_TEXT[v] : "Historical data unavailable.";
 }
 
-// ---------- price map ----------
-function renderPriceMap(t) {
-  const em = t.expected;
-  const box = $("price-map");
-  const values = [em.low, em.high, t.spot, t.strike, t.breakeven];
-  let lo = Math.min(...values), hi = Math.max(...values);
-  const pad = (hi - lo) * 0.12 || 1;
-  lo -= pad; hi += pad;
-  const pos = (v) => ((v - lo) / (hi - lo)) * 100;
+// ---------- trades like this one ----------
+const cents = (r) => `${r < 0 ? "−" : "+"}${Math.abs(r * 100).toFixed(0)}¢`;
 
-  const dir = t.move_needed >= 0 ? "rise" : "fall";
-  $("map-sub").textContent =
-    `SPY must ${dir} ${money(Math.abs(t.move_needed))} by 4 PM to break even. ` +
-    `That's ${t.move_vs_expected.toFixed(1)}× the move the market expects today.`;
-  box.setAttribute("aria-label",
-    `SPY now ${money(t.spot)}, strike ${t.strike}, breakeven ${money(t.breakeven)}, expected range ${money(em.low)} to ${money(em.high)}`);
-
-  // Labels sit above or below the axis. If a label would collide with one already placed,
-  // try the other side, then one tier further out (with a longer stem).
-  const width = box.clientWidth || 600;
-  const minGapPct = (96 / width) * 100;
-  const marks = [
-    { v: t.breakeven, title: "Breakeven", color: "var(--series-2)", prefer: "above" },
-    { v: t.spot, title: "SPY now", color: "var(--ink)", prefer: "above" },
-    { v: t.strike, title: "Strike", color: "var(--axis)", prefer: "below" },
-  ];
-  const placed = [];
-  for (const m of marks) {
-    m.p = pos(m.v);
-    const other = m.prefer === "above" ? "below" : "above";
-    const free = (row, tier) => placed.every((q) => q.row !== row || q.tier !== tier || Math.abs(q.p - m.p) >= minGapPct);
-    outer: for (let tier = 0; tier < 3; tier++) {
-      for (const row of [m.prefer, other]) if (free(row, tier)) { Object.assign(m, { row, tier }); break outer; }
-    }
-    if (!m.row) Object.assign(m, { row: m.prefer, tier: 3 });
-    placed.push(m);
+function renderEvidence({ evidence: ev, trade: t }) {
+  const card = $("similar-card");
+  card.hidden = !ev;
+  if (!ev) return;
+  const s = ev.similar;
+  const line = $("similar-line");
+  if (!s) {
+    line.textContent = "No close match in our history";
+    $("similar-sub").textContent = t.minutes_left > 390 ? "Same-day trades only." : "Too few similar past trades.";
+    $("similar-stats").replaceChildren();
+    $("similar-fine").textContent = "";
+    return;
   }
-  const TIER = 40, STEM = 12, LABEL = 34;
-  const tiers = (row) => Math.max(-1, ...placed.filter((m) => m.row === row).map((m) => m.tier)) + 1;
-  const axisY = Math.max(16, tiers("above") * TIER + LABEL - TIER + STEM + 14);
-  box.style.height = `${axisY + Math.max(16, tiers("below") * TIER + LABEL - TIER + STEM + 14)}px`;
-
-  const a = Math.min(t.spot, t.breakeven), b = Math.max(t.spot, t.breakeven);
-  const parts = [
-    el("div", { class: "pm-band", style: { top: `${axisY - 13}px`, left: `${pos(em.low)}%`, width: `${pos(em.high) - pos(em.low)}%` } }),
-    el("div", { class: "pm-axis", style: { top: `${axisY - 1}px` } }),
-    el("div", { class: "pm-gap", style: { top: `${axisY - 2}px`, left: `${pos(a)}%`, width: `${pos(b) - pos(a)}%` } }),
-  ];
-  for (const m of placed) {
-    const left = Math.min(Math.max(m.p, 7), 93);   // keep text inside the card
-    const text = el("div", { class: "pm-text", style: { transform: `translateX(${(left - m.p) * width / 100}px)` } },
-      m.title, el("b", {}, money(m.v)));
-    const stem = el("div", { class: "pm-stem", style: { height: `${STEM + m.tier * TIER}px` } });
-    const dot = el("div", { class: "pm-dot", style: { background: m.color } });
-    const above = m.row === "above";
-    parts.push(el("div", {
-      class: "pm-mark",
-      style: { left: `${m.p}%`, top: `${axisY + (above ? 6 : -6)}px`, transform: `translate(-50%, ${above ? "-100%" : "0"})` },
-    }, ...(above ? [text, stem, dot] : [dot, stem, text])));
-  }
-  box.replaceChildren(...parts);
-
-  // legend under the map
-  let legend = box.nextElementSibling;
-  if (!legend?.classList.contains("legend")) {
-    legend = el("div", { class: "legend", style: { marginTop: "14px", marginBottom: "0" } });
-    box.after(legend);
-  }
-  legend.replaceChildren(
-    el("span", {}, el("span", { class: "swatch", style: { background: "var(--accent-wash)", border: "1px solid var(--series-1)" } }),
-      `Market's expected range (±${money(em.move)})`),
-    el("span", {}, el("span", { class: "line-key", style: { background: "var(--series-2)", height: "4px" } }), "Move you need"),
+  const r = s.return_per_dollar;
+  line.replaceChildren("Past trades like this ", el("span", { class: r < 0 ? "neg" : "pos" }, `${r < 0 ? "lost" : "made"} ${cents(r).slice(1)}`), " per $1");
+  $("similar-sub").textContent = `${s.trades.toLocaleString()} ${t.option_type}s · ${s.z_label} · bought ${s.time_bucket} · held to 4 PM`;
+  const stat = (k, v, sub) => el("div", { class: "mini-stat" }, el("div", { class: "k" }, k), el("div", { class: "v" }, v), el("div", { class: "s" }, sub));
+  $("similar-stats").replaceChildren(
+    stat("Won", pct(s.win_rate), ""),
+    stat("Finished in the money", pct(s.itm_rate), `market said ${pct(s.avg_prob_itm)}`),
+    stat("Return per $1", cents(r), `range ${cents(s.ci_low)} to ${cents(s.ci_high)}`),
   );
+  $("similar-fine").textContent = `All 0DTE trades: ${cents(ev.all_trades.return_per_dollar)} per $1.`;
 }
 
 // ---------- tiles ----------
 function renderTiles(t) {
   const em = t.expected;
-  const tile = (label, value, ...sub) => el("article", { class: "card tile" },
-    el("div", { class: "tile-label" }, label), el("div", { class: "tile-value" }, value), el("div", { class: "tile-sub" }, ...sub));
   const flatPct = t.model_value > 0 ? t.loss_if_flat / t.model_value : 0;
-  $("tiles").replaceChildren(
-    tile("Breakeven at close", money(t.breakeven),
-      "SPY ", el("b", {}, signedMoney(t.move_needed)), ` (${signedPct(t.move_needed / t.spot)})`),
-    tile("Expected move today", `±${money(em.move)}`,
-      "Range ", el("b", {}, `${money(em.low, 0)}–${money(em.high, 0)}`), ` · IV ${pct(em.atm_iv, 1)}`),
-    tile("Chance of profit", pct(t.prob_profit),
-      "Finishes in the money: ", el("b", {}, pct(t.prob_itm))),
-    tile("Time decay", `${money(t.theta_per_hour)}/hr`,
-      `If SPY sits still ${duration(t.hours_ahead * 60)}: `, el("b", {}, `${money(t.model_value)} → ${money(t.value_later)}`),
-      ` (−${pct(flatPct)})`),
+  const row = (k, v, sub) => [el("dt", {}, k), el("dd", {}, v, sub ? el("small", {}, sub) : null)];
+  $("ticket-stats").replaceChildren(
+    ...row("Bid / Ask", `${money(t.bid)} / ${money(t.ask)}`, `mid ${money(t.mid)}`),
+    ...row("Expected move", `±${money(em.move)}`, `${money(em.low, 0)}–${money(em.high, 0)}`),
+    ...row("Implied vol", pct(t.iv, 1), `ATM ${pct(em.atm_iv, 1)}`),
+    ...row("Time decay", `${money(t.theta_per_hour)}/hr`),
+    ...row("Market odds", `${pct(t.prob_profit)} profit`, `${pct(t.prob_itm)} ITM`),
+    ...row("Delta / Gamma", `${t.delta.toFixed(2)} / ${t.gamma.toFixed(3)}`),
   );
+}
+
+// ---------- ML model ----------
+function compareRows(rows, fmt) {
+  const max = Math.max(1e-9, ...rows.map((r) => r.value));
+  return rows.map((r) => el("div", { class: "compare-row" },
+    el("div", { class: "compare-label" }, el("span", { class: "swatch", style: { background: r.color } }), r.label),
+    el("div", { class: "track" }, el("div", { class: "fill", style: { width: `${(r.value / max) * 100}%`, background: r.color } })),
+    el("div", { class: "compare-value" }, fmt(r.value))));
+}
+
+function renderModel({ model: m, trade: t }) {
+  const body = $("model-body");
+  if (!m) {
+    $("model-sub").textContent = "";
+    body.replaceChildren(el("p", { class: "model-empty" }, "Available during market hours on expiry day."));
+    $("model-fine").textContent = "";
+    return;
+  }
+  $("model-sub").textContent = "";
+  const market = "var(--series-1)", model = "var(--series-3)";
+  body.replaceChildren(
+    el("div", { class: "model-group" }, el("h4", {}, "Expected move by the close"),
+      el("div", { class: "compare" }, compareRows([
+        { label: "Market (options prices)", value: m.market_move, color: market },
+        { label: "ML forecast", value: m.expected_move, color: model }], (x) => `±${money(x)}`))),
+    el("div", { class: "model-group" }, el("h4", {}, "Chance it finishes in the money"),
+      el("div", { class: "compare" }, compareRows([
+        { label: "Market (options prices)", value: t.prob_itm, color: market },
+        { label: "ML forecast", value: m.prob_itm, color: model }], (x) => pct(x)))),
+  );
+  const track = researchLine();
+  $("model-fine").replaceChildren(track ? track + " " : "", el("a", { href: "research.html" }, "Results →"));
+}
+
+// One honest sentence about the model's track record, computed from research.json
+function researchLine() {
+  const R = state.research;
+  if (!R) return "";
+  const s = Object.fromEntries(R.model_vs_market.scores.map((r) => [r.model, r]));
+  const mkt = s["market (ATM implied vol)"], ml = s.gbm;
+  return ml.qlike < mkt.qlike
+    ? "More accurate than the market in testing."
+    : "Less accurate than the market in testing: a second opinion.";
 }
 
 // ---------- history ----------
 function renderHistory({ trade: t, history: h }) {
   const table = $("history-table");
   if (!h) {
-    $("history-sub").textContent = "Historical data couldn't be loaded.";
+    $("history-sub").textContent = "Historical data unavailable.";
     table.replaceChildren();
     return;
   }
-  $("history-sub").textContent =
-    `SPY needed ${signedPct(h.needed_itm_pct)} to reach the strike and ${signedPct(h.needed_profit_pct)} to break even, ` +
-    `over the last ${duration(h.window_minutes)} of the trading day.`;
+  $("history-sub").textContent = `Needs ${signedPct(h.needed_itm_pct)} to the strike, ${signedPct(h.needed_profit_pct)} to break even (${duration(h.window_minutes)} left)`;
   const head = el("thead", {}, el("tr", {},
     el("th", {}, "Source"), el("th", { class: "num" }, "Days"),
     el("th", { class: "num" }, "Finished ITM"), el("th", { class: "num" }, "Past breakeven")));
@@ -357,9 +426,7 @@ function renderGreeks({ trade: t, greeks_curve: g, market }) {
   const same = Math.abs(g.series[0].gamma[0] - g.series[1].gamma[0]) < 1e-12;
   const series = same ? [g.series[1]] : g.series;
   const cols = same ? [colors[1]] : colors;
-  $("greeks-sub").textContent =
-    `SPY held at ${money(t.spot)}, from the 9:30 open (left) to 5 minutes before the close (right). ` +
-    `At the money, both explode in the final hour.`;
+  $("greeks-sub").textContent = "Both explode in the final hour.";
   $("greeks-legend").replaceChildren(...series.map((s, i) =>
     el("span", {}, el("span", { class: "line-key", style: { background: cols[i] } }), s.label)));
   const nowMin = market.market_open ? t.minutes_left : null;
@@ -489,11 +556,25 @@ $("strike").addEventListener("change", (e) => {
 $("premium").addEventListener("input", () => { state.premiumEdited = true; syncPremium(); });
 $("trade-form").addEventListener("submit", (e) => { e.preventDefault(); runCheck(); });
 $("refresh").addEventListener("click", () => loadMarket());
-$("theme-toggle").addEventListener("click", () => {
-  const root = document.documentElement;
-  const dark = root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
-  root.dataset.theme = dark ? "light" : "dark";
-  try { localStorage.setItem("theme", root.dataset.theme); } catch (e) {}
+setupThemeToggle();
+
+const tabs = [...document.querySelectorAll('.tabs [role="tab"]')];
+function selectTab(tab, focus = false) {
+  for (const t of tabs) {
+    const on = t === tab;
+    t.setAttribute("aria-selected", on);
+    t.tabIndex = on ? 0 : -1;
+    document.getElementById(t.getAttribute("aria-controls")).hidden = !on;
+  }
+  if (focus) tab.focus();
+  if (state.lastCheck && tab.id === "tab-greeks") renderGreeks(state.lastCheck);   // charts need a visible box to size
+}
+tabs.forEach((t, i) => {
+  t.addEventListener("click", () => selectTab(t));
+  t.addEventListener("keydown", (e) => {
+    const d = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+    if (d) { e.preventDefault(); selectTab(tabs[(i + d + tabs.length) % tabs.length], true); }
+  });
 });
 
 let resizeTimer, lastWidth = 0;
@@ -505,4 +586,8 @@ new ResizeObserver(([entry]) => {
   resizeTimer = setTimeout(() => { if (state.lastCheck) render(state.lastCheck); }, 120);
 }).observe($("results"));
 
+fetch("research.json").then((r) => (r.ok ? r.json() : null)).then((R) => {
+  state.research = R;
+  if (state.lastCheck) renderModel(state.lastCheck);
+}).catch(() => {});
 loadMarket();

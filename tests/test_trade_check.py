@@ -104,3 +104,21 @@ def test_unknown_strike_raises(market):
 def test_bad_premium(market):
     with pytest.raises(ValueError):
         check_trade(market, "call", 772, premium=0)
+
+
+def test_itm_option_uses_otm_side_iv():
+    # 766 call is $4 ITM; give it a noisy price (+2 cents) -> its own IV would be badly off.
+    # The 766 put (OTM, still has a real bid) is clean, so the checker should recover the true 18% from it.
+    m = synthetic_market()
+    noisy = m.chain.copy()
+    mask = (noisy["type"] == "call") & (noisy["strike"] == 766.0)
+    noisy.loc[mask, ["bid", "ask", "mid"]] += 0.02
+    m.chain = noisy
+    c = check_trade(m, "call", 766)
+    assert c.iv == pytest.approx(SIGMA, rel=1e-4)
+
+
+def test_itm_odds_are_monotonic_across_strikes():
+    m = synthetic_market()
+    probs = [check_trade(m, "put", k).prob_itm for k in range(771, 781)]
+    assert probs == sorted(probs)

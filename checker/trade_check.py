@@ -74,11 +74,11 @@ def check_trade(market: MarketSnapshot, option_type: str, strike: float,
     em = expected_move(chain, S, T, r)
     move_vs_expected = abs(move_needed) / em["move"]
 
-    # 3. Probabilities, using this option's own IV
-    iv = implied_vol(row["mid"], S, strike, T, r, option_type)
+    # 3. Probabilities, using this strike's IV
+    iv = strike_iv(chain, S, strike, T, r, option_type, row)
     if isnan(iv):
         iv = em["atm_iv"]
-        notes.append("This option's price is almost all intrinsic value, so its own IV can't be "
+        notes.append("This strike's prices are almost all intrinsic value, so its implied vol can't be "
                      f"solved; using the ATM IV ({iv:.1%}) instead.")
     p_itm = prob_itm(S, strike, T, r, iv, option_type)
     p_profit = prob_itm(S, breakeven, T, r, iv, option_type)
@@ -109,3 +109,22 @@ def check_trade(market: MarketSnapshot, option_type: str, strike: float,
         notes=notes,
     )
 
+
+
+def strike_iv(chain, S: float, strike: float, T: float, r: float, option_type: str, row) -> float:
+    """Implied vol for this strike, taken from its OUT-of-the-money side.
+
+    An in-the-money option is mostly intrinsic value, so a cent of price noise swings its IV a lot
+    (or makes it unsolvable). Put-call parity gives the call and put at a strike the same IV, so for
+    an ITM option we solve with the OTM option at the same strike, which is all time value.
+    """
+    itm = strike < S if option_type == "call" else strike > S
+    if itm:
+        other = "put" if option_type == "call" else "call"
+        try:
+            iv = implied_vol(option_row(chain, strike, other)["mid"], S, strike, T, r, other)
+            if not isnan(iv):
+                return iv
+        except KeyError:
+            pass
+    return implied_vol(row["mid"], S, strike, T, r, option_type)

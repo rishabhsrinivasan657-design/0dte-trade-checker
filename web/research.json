@@ -1,0 +1,1238 @@
+{
+ "generated": "2026-10-16T12:04-04:00",
+ "spy_range": [
+  "2018-01-02",
+  "2026-10-14"
+ ],
+ "options_range": [
+  "2024-02-01",
+  "2026-10-14"
+ ],
+ "ml": {
+  "rows": 26220,
+  "days": 2185,
+  "overall": [
+   {
+    "model": "seasonal",
+    "qlike": 0.5118206567,
+    "log_mae": 0.8450610817,
+    "within_1sd": 0.7427174976,
+    "n": 20460
+   },
+   {
+    "model": "har",
+    "qlike": 0.3643635706,
+    "log_mae": 0.6110203496,
+    "within_1sd": 0.7213587488,
+    "n": 20460
+   },
+   {
+    "model": "gbm",
+    "qlike": 0.3582295389,
+    "log_mae": 0.6280273306,
+    "within_1sd": 0.7183284457,
+    "n": 20460
+   }
+  ],
+  "by_year": [
+   {
+    "year": 2020,
+    "model": "seasonal",
+    "qlike": 0.6675360118,
+    "log_mae": 0.9428846341,
+    "within_1sd": 0.7164031621,
+    "n": 3036
+   },
+   {
+    "year": 2020,
+    "model": "har",
+    "qlike": 0.355872884,
+    "log_mae": 0.7862594935,
+    "within_1sd": 0.7812911726,
+    "n": 3036
+   },
+   {
+    "year": 2020,
+    "model": "gbm",
+    "qlike": 0.553116835,
+    "log_mae": 0.7582386027,
+    "within_1sd": 0.7098155468,
+    "n": 3036
+   },
+   {
+    "year": 2021,
+    "model": "seasonal",
+    "qlike": 0.4846547918,
+    "log_mae": 0.8907635999,
+    "within_1sd": 0.7417328042,
+    "n": 3024
+   },
+   {
+    "year": 2021,
+    "model": "har",
+    "qlike": 0.2938312763,
+    "log_mae": 0.5433554369,
+    "within_1sd": 0.691468254,
+    "n": 3024
+   },
+   {
+    "year": 2021,
+    "model": "gbm",
+    "qlike": 0.2814759265,
+    "log_mae": 0.6375503337,
+    "within_1sd": 0.7318121693,
+    "n": 3024
+   },
+   {
+    "year": 2022,
+    "model": "seasonal",
+    "qlike": 0.3688195418,
+    "log_mae": 0.690654487,
+    "within_1sd": 0.7021912351,
+    "n": 3012
+   },
+   {
+    "year": 2022,
+    "model": "har",
+    "qlike": 0.3522865785,
+    "log_mae": 0.5250959641,
+    "within_1sd": 0.6686586985,
+    "n": 3012
+   },
+   {
+    "year": 2022,
+    "model": "gbm",
+    "qlike": 0.3285889942,
+    "log_mae": 0.5520375329,
+    "within_1sd": 0.6686586985,
+    "n": 3012
+   },
+   {
+    "year": 2023,
+    "model": "seasonal",
+    "qlike": 0.3040256998,
+    "log_mae": 0.6922601697,
+    "within_1sd": 0.7346666667,
+    "n": 3000
+   },
+   {
+    "year": 2023,
+    "model": "har",
+    "qlike": 0.3645333697,
+    "log_mae": 0.5257425146,
+    "within_1sd": 0.684,
+    "n": 3000
+   },
+   {
+    "year": 2023,
+    "model": "gbm",
+    "qlike": 0.308255897,
+    "log_mae": 0.5359212694,
+    "within_1sd": 0.6786666667,
+    "n": 3000
+   },
+   {
+    "year": 2024,
+    "model": "seasonal",
+    "qlike": 0.5314029237,
+    "log_mae": 0.7600985079,
+    "within_1sd": 0.7582671958,
+    "n": 3024
+   },
+   {
+    "year": 2024,
+    "model": "har",
+    "qlike": 0.4560765169,
+    "log_mae": 0.5686997715,
+    "within_1sd": 0.7003968254,
+    "n": 3024
+   },
+   {
+    "year": 2024,
+    "model": "gbm",
+    "qlike": 0.3647205098,
+    "log_mae": 0.5649696818,
+    "within_1sd": 0.7063492063,
+    "n": 3024
+   },
+   {
+    "year": 2025,
+    "model": "seasonal",
+    "qlike": 0.7560498455,
+    "log_mae": 1.0650755142,
+    "within_1sd": 0.7736666667,
+    "n": 3000
+   },
+   {
+    "year": 2025,
+    "model": "har",
+    "qlike": 0.4068881726,
+    "log_mae": 0.6679194336,
+    "within_1sd": 0.7503333333,
+    "n": 3000
+   },
+   {
+    "year": 2025,
+    "model": "gbm",
+    "qlike": 0.3441966624,
+    "log_mae": 0.6631803916,
+    "within_1sd": 0.758,
+    "n": 3000
+   },
+   {
+    "year": 2026,
+    "model": "seasonal",
+    "qlike": 0.457504939,
+    "log_mae": 0.8810857033,
+    "within_1sd": 0.7804568528,
+    "n": 2364
+   },
+   {
+    "year": 2026,
+    "model": "har",
+    "qlike": 0.3093805457,
+    "log_mae": 0.6721500394,
+    "within_1sd": 0.7872250423,
+    "n": 2364
+   },
+   {
+    "year": 2026,
+    "model": "gbm",
+    "qlike": 0.3168138336,
+    "log_mae": 0.6983774223,
+    "within_1sd": 0.7906091371,
+    "n": 2364
+   }
+  ],
+  "features": [
+   "minutes_left",
+   "rv_so_far_pm",
+   "move_so_far",
+   "range_so_far",
+   "gap",
+   "rv_1d",
+   "rv_5d",
+   "rv_22d",
+   "rv_tod",
+   "vix_prev",
+   "dow"
+  ]
+ },
+ "model_vs_market": {
+  "moments": 4045,
+  "scores": [
+   {
+    "model": "market (ATM implied vol)",
+    "qlike": 0.1994493774,
+    "log_mae": 0.5527082611,
+    "within_1sd": 0.7826946848,
+    "n": 4045
+   },
+   {
+    "model": "seasonal",
+    "qlike": 0.5723474444,
+    "log_mae": 0.8902816138,
+    "within_1sd": 0.7755253399,
+    "n": 4045
+   },
+   {
+    "model": "har",
+    "qlike": 0.3913121874,
+    "log_mae": 0.6203699213,
+    "within_1sd": 0.7480840544,
+    "n": 4045
+   },
+   {
+    "model": "gbm",
+    "qlike": 0.3299618156,
+    "log_mae": 0.6233579908,
+    "within_1sd": 0.7577255871,
+    "n": 4045
+   },
+   {
+    "model": "blend (market \u00d7 gbm)",
+    "qlike": 0.216398586,
+    "log_mae": 0.5525401108,
+    "within_1sd": 0.7713226205,
+    "n": 4045
+   }
+  ]
+ },
+ "backtest": {
+  "trades": 80646,
+  "days": 677,
+  "all": [
+   {
+    "all": "all trades",
+    "trades": 80646,
+    "days": 677,
+    "win_rate": 0.2719911713,
+    "itm_rate": 0.498462416,
+    "avg_prob_itm": 0.4990090227,
+    "return_per_dollar": -0.0647290335,
+    "ci_low": -0.089065912,
+    "ci_high": -0.0380358296,
+    "ex_best_day": -0.0753299461
+   }
+  ],
+  "by_history_verdict": [
+   {
+    "verdict": "Cheap",
+    "trades": 20188,
+    "days": 677,
+    "win_rate": 0.3598672479,
+    "itm_rate": 0.6618783436,
+    "avg_prob_itm": 0.6329439649,
+    "return_per_dollar": -0.0538435197,
+    "ci_low": -0.0870822148,
+    "ci_high": -0.0177555397,
+    "ex_best_day": -0.0706476927
+   },
+   {
+    "verdict": "Expensive",
+    "trades": 20186,
+    "days": 677,
+    "win_rate": 0.2067274349,
+    "itm_rate": 0.3369166749,
+    "avg_prob_itm": 0.3669457127,
+    "return_per_dollar": -0.099782113,
+    "ci_low": -0.1882106607,
+    "ci_high": -0.0149580727,
+    "ex_best_day": -0.1289913438
+   },
+   {
+    "verdict": "Fair",
+    "trades": 40272,
+    "days": 677,
+    "win_rate": 0.2606525626,
+    "itm_rate": 0.4975168852,
+    "avg_prob_itm": 0.4980642313,
+    "return_per_dollar": -0.0623790834,
+    "ci_low": -0.0768383049,
+    "ci_high": -0.0483136672,
+    "ex_best_day": -0.0645990928
+   }
+  ],
+  "by_model_verdict": [
+   {
+    "model_verdict": "Cheap",
+    "trades": 10578,
+    "days": 651,
+    "win_rate": 0.3894876158,
+    "itm_rate": 0.7468330497,
+    "avg_prob_itm": 0.6918832106,
+    "return_per_dollar": -0.0459641989,
+    "ci_low": -0.0713544491,
+    "ci_high": -0.0137910503,
+    "ex_best_day": -0.0584730983
+   },
+   {
+    "model_verdict": "Expensive",
+    "trades": 10583,
+    "days": 651,
+    "win_rate": 0.1436265709,
+    "itm_rate": 0.2524803931,
+    "avg_prob_itm": 0.3080464117,
+    "return_per_dollar": -0.1770634878,
+    "ci_low": -0.2583554083,
+    "ci_high": -0.0756718415,
+    "ex_best_day": -0.2207407731
+   },
+   {
+    "model_verdict": "Fair",
+    "trades": 59485,
+    "days": 676,
+    "win_rate": 0.2739346054,
+    "itm_rate": 0.498058334,
+    "avg_prob_itm": 0.4986851453,
+    "return_per_dollar": -0.0600865712,
+    "ci_low": -0.0901933809,
+    "ci_high": -0.0264561155,
+    "ex_best_day": -0.0746122502
+   }
+  ],
+  "by_otm": [
+   {
+    "bucket": "$0\u20131 OTM",
+    "trades": 8085,
+    "days": 677,
+    "win_rate": 0.254174397,
+    "itm_rate": 0.3850340136,
+    "avg_prob_itm": 0.411288027,
+    "return_per_dollar": -0.1639633667,
+    "ci_low": -0.2209184115,
+    "ci_high": -0.1012475212,
+    "ex_best_day": -0.1853906784
+   },
+   {
+    "bucket": "$1\u20132 OTM",
+    "trades": 8085,
+    "days": 677,
+    "win_rate": 0.1586889301,
+    "itm_rate": 0.2185528757,
+    "avg_prob_itm": 0.2666907275,
+    "return_per_dollar": -0.2153994094,
+    "ci_low": -0.2936580627,
+    "ci_high": -0.1242688182,
+    "ex_best_day": -0.2491460776
+   },
+   {
+    "bucket": "$2\u20133 OTM",
+    "trades": 8078,
+    "days": 677,
+    "win_rate": 0.095939589,
+    "itm_rate": 0.1206981926,
+    "avg_prob_itm": 0.1730494429,
+    "return_per_dollar": -0.2531622683,
+    "ci_low": -0.3762343568,
+    "ci_high": -0.1338909174,
+    "ex_best_day": -0.3039664133
+   },
+   {
+    "bucket": "$3\u20135 OTM",
+    "trades": 16115,
+    "days": 677,
+    "win_rate": 0.0479056779,
+    "itm_rate": 0.057337884,
+    "avg_prob_itm": 0.097770368,
+    "return_per_dollar": -0.2825851065,
+    "ci_low": -0.4480761293,
+    "ci_high": -0.0783795391,
+    "ex_best_day": -0.3672560835
+   }
+  ],
+  "by_time": [
+   {
+    "time": "10:00",
+    "trades": 13502,
+    "days": 675,
+    "win_rate": 0.2984743001,
+    "itm_rate": 0.4995556214,
+    "avg_prob_itm": 0.4999914423,
+    "return_per_dollar": -0.0622524025,
+    "ci_low": -0.1007437828,
+    "ci_high": -0.0235578655,
+    "ex_best_day": -0.0736940565
+   },
+   {
+    "time": "11:00",
+    "trades": 13497,
+    "days": 676,
+    "win_rate": 0.2819144995,
+    "itm_rate": 0.4993702304,
+    "avg_prob_itm": 0.4998186405,
+    "return_per_dollar": -0.0608892886,
+    "ci_low": -0.0992680395,
+    "ci_high": -0.0168439338,
+    "ex_best_day": -0.0765333603
+   },
+   {
+    "time": "12:00",
+    "trades": 13507,
+    "days": 677,
+    "win_rate": 0.273043607,
+    "itm_rate": 0.4984082328,
+    "avg_prob_itm": 0.4990414058,
+    "return_per_dollar": -0.0618650804,
+    "ci_low": -0.0998457087,
+    "ci_high": -0.0231438857,
+    "ex_best_day": -0.0783436135
+   },
+   {
+    "time": "13:00",
+    "trades": 13462,
+    "days": 676,
+    "win_rate": 0.2654880404,
+    "itm_rate": 0.4979943545,
+    "avg_prob_itm": 0.4985931481,
+    "return_per_dollar": -0.0682959184,
+    "ci_low": -0.0994109947,
+    "ci_high": -0.0338421025,
+    "ex_best_day": -0.0831524886
+   },
+   {
+    "time": "14:00",
+    "trades": 13363,
+    "days": 671,
+    "win_rate": 0.256304722,
+    "itm_rate": 0.4980169124,
+    "avg_prob_itm": 0.4985920809,
+    "return_per_dollar": -0.0775850371,
+    "ci_low": -0.0981337207,
+    "ci_high": -0.0554562813,
+    "ex_best_day": -0.0851654855
+   },
+   {
+    "time": "15:00",
+    "trades": 13315,
+    "days": 670,
+    "win_rate": 0.2563274502,
+    "itm_rate": 0.4974089373,
+    "avg_prob_itm": 0.4979981819,
+    "return_per_dollar": -0.0585868752,
+    "ci_low": -0.0739912521,
+    "ci_high": -0.0409607384,
+    "ex_best_day": -0.0629035174
+   }
+  ],
+  "cost_sensitivity": [
+   {
+    "spread_multiplier": 0,
+    "return_per_dollar": -0.05364311081804827
+   },
+   {
+    "spread_multiplier": 1,
+    "return_per_dollar": -0.06472903348508656
+   },
+   {
+    "spread_multiplier": 2,
+    "return_per_dollar": -0.07555823547939408
+   }
+  ]
+ },
+ "straddles": {
+  "by_signal": [
+   {
+    "signal": "model says smaller move",
+    "trades": 1345,
+    "days": 413,
+    "win_rate": 0.2855018587,
+    "itm_rate": 0.9962825279,
+    "avg_prob_itm": null,
+    "return_per_dollar": -0.2034243493,
+    "ci_low": -0.2717157383,
+    "ci_high": -0.1355629211,
+    "ex_best_day": -0.232441472
+   },
+   {
+    "signal": "about equal",
+    "trades": 1345,
+    "days": 490,
+    "win_rate": 0.3375464684,
+    "itm_rate": 0.9940520446,
+    "avg_prob_itm": null,
+    "return_per_dollar": -0.0765181336,
+    "ci_low": -0.1516421032,
+    "ci_high": 0.0181373741,
+    "ex_best_day": -0.1103935746
+   },
+   {
+    "signal": "model says bigger move",
+    "trades": 1345,
+    "days": 380,
+    "win_rate": 0.3353159851,
+    "itm_rate": 1.0,
+    "avg_prob_itm": null,
+    "return_per_dollar": -0.1186920357,
+    "ci_low": -0.1863741258,
+    "ci_high": -0.0555436168,
+    "ex_best_day": -0.1355143052
+   }
+  ],
+  "ratio_bounds": [
+   {
+    "signal": "model says smaller move",
+    "min": 0.2279257447,
+    "max": 0.8670695063
+   },
+   {
+    "signal": "about equal",
+    "min": 0.8671186623,
+    "max": 1.0519848976
+   },
+   {
+    "signal": "model says bigger move",
+    "min": 1.0527092503,
+    "max": 8.2825597273
+   }
+  ],
+  "n": 4035
+ },
+ "calibration": {
+  "market": [
+   {
+    "predicted": 0.0297606545,
+    "actual": 0.0067193012,
+    "n": 5953
+   },
+   {
+    "predicted": 0.0735991063,
+    "actual": 0.0264644183,
+    "n": 6197
+   },
+   {
+    "predicted": 0.1471003334,
+    "actual": 0.0926368375,
+    "n": 9208
+   },
+   {
+    "predicted": 0.2481373324,
+    "actual": 0.1904237755,
+    "n": 7268
+   },
+   {
+    "predicted": 0.3489001775,
+    "actual": 0.3070074196,
+    "n": 6065
+   },
+   {
+    "predicted": 0.4495305017,
+    "actual": 0.436920385,
+    "n": 5715
+   },
+   {
+    "predicted": 0.5504629288,
+    "actual": 0.5604549431,
+    "n": 5715
+   },
+   {
+    "predicted": 0.6511057943,
+    "actual": 0.6912298055,
+    "n": 6066
+   },
+   {
+    "predicted": 0.7518625847,
+    "actual": 0.8084227911,
+    "n": 7266
+   },
+   {
+    "predicted": 0.8528965326,
+    "actual": 0.9068403909,
+    "n": 9210
+   },
+   {
+    "predicted": 0.9263977096,
+    "actual": 0.9731825525,
+    "n": 6190
+   },
+   {
+    "predicted": 0.9698944582,
+    "actual": 0.9930951148,
+    "n": 5793
+   }
+  ],
+  "history": [
+   {
+    "predicted": 0.0254765225,
+    "actual": 0.0405334728,
+    "n": 11472
+   },
+   {
+    "predicted": 0.0824436263,
+    "actual": 0.08835711,
+    "n": 6519
+   },
+   {
+    "predicted": 0.1531716277,
+    "actual": 0.1443990002,
+    "n": 8802
+   },
+   {
+    "predicted": 0.2556576314,
+    "actual": 0.2472257595,
+    "n": 5497
+   },
+   {
+    "predicted": 0.3573029483,
+    "actual": 0.3504061372,
+    "n": 4432
+   },
+   {
+    "predicted": 0.4570100503,
+    "actual": 0.4547738693,
+    "n": 3980
+   },
+   {
+    "predicted": 0.5587006484,
+    "actual": 0.5626692933,
+    "n": 4061
+   },
+   {
+    "predicted": 0.6591892483,
+    "actual": 0.6643356643,
+    "n": 4576
+   },
+   {
+    "predicted": 0.761467995,
+    "actual": 0.7672621092,
+    "n": 5822
+   },
+   {
+    "predicted": 0.8635496052,
+    "actual": 0.8669412976,
+    "n": 9710
+   },
+   {
+    "predicted": 0.9345550357,
+    "actual": 0.9295335318,
+    "n": 7053
+   },
+   {
+    "predicted": 0.9816192769,
+    "actual": 0.9629672094,
+    "n": 8722
+   }
+  ],
+  "model": [
+   {
+    "predicted": 0.0156848017,
+    "actual": 0.0193354609,
+    "n": 10654
+   },
+   {
+    "predicted": 0.0740829129,
+    "actual": 0.057461587,
+    "n": 4751
+   },
+   {
+    "predicted": 0.1485031629,
+    "actual": 0.1126778953,
+    "n": 7659
+   },
+   {
+    "predicted": 0.2491645576,
+    "actual": 0.204193397,
+    "n": 6391
+   },
+   {
+    "predicted": 0.3497690172,
+    "actual": 0.3242369838,
+    "n": 5570
+   },
+   {
+    "predicted": 0.4497115972,
+    "actual": 0.4363501208,
+    "n": 5381
+   },
+   {
+    "predicted": 0.5502841283,
+    "actual": 0.5610481323,
+    "n": 5381
+   },
+   {
+    "predicted": 0.650223167,
+    "actual": 0.6741472172,
+    "n": 5570
+   },
+   {
+    "predicted": 0.7508272541,
+    "actual": 0.7942419027,
+    "n": 6391
+   },
+   {
+    "predicted": 0.8514906047,
+    "actual": 0.8868293956,
+    "n": 7661
+   },
+   {
+    "predicted": 0.9259067482,
+    "actual": 0.9418702612,
+    "n": 4748
+   },
+   {
+    "predicted": 0.9841283385,
+    "actual": 0.9802650396,
+    "n": 10489
+   }
+  ]
+ },
+ "realistic_chance": {
+  "itm": {
+   "test_from": "2025-11-19",
+   "n_test": 27043,
+   "brier_market": 0.12369558333241287,
+   "brier_realistic": 0.12165608095313808
+  },
+  "profit": {
+   "test_from": "2025-11-19",
+   "n_test": 27043,
+   "brier_market": 0.17295426735983419,
+   "brier_realistic": 0.17189217835944837
+  }
+ },
+ "trade_score": {
+  "oos_trades": 66045,
+  "spearman": 0.5137854254709349,
+  "ratings": [
+   {
+    "rating": "avoid",
+    "trades": 13208,
+    "days": 543,
+    "win_rate": 0.0360387644,
+    "itm_rate": 0.0451241672,
+    "avg_prob_itm": 0.0955931977,
+    "return_per_dollar": -0.4849873079,
+    "ci_low": -0.6428697378,
+    "ci_high": -0.2992608594,
+    "ex_best_day": -0.5823400103,
+    "label": "Avoid"
+   },
+   {
+    "rating": "poor",
+    "trades": 13209,
+    "days": 552,
+    "win_rate": 0.1694299341,
+    "itm_rate": 0.2474070709,
+    "avg_prob_itm": 0.2856246904,
+    "return_per_dollar": -0.1531568005,
+    "ci_low": -0.2594301865,
+    "ci_high": -0.0484853591,
+    "ex_best_day": -0.1903899731,
+    "label": "Poor odds"
+   },
+   {
+    "rating": "typical",
+    "trades": 39628,
+    "days": 553,
+    "win_rate": 0.3852074291,
+    "itm_rate": 0.734177854,
+    "avg_prob_itm": 0.7055164848,
+    "return_per_dollar": -0.0502066757,
+    "ci_low": -0.0741487712,
+    "ci_high": -0.022652766,
+    "ex_best_day": -0.0607509924,
+    "label": "Typical 0DTE trade"
+   }
+  ],
+  "within_group": [
+   {
+    "within": "lower third",
+    "trades": 22037,
+    "days": 531,
+    "win_rate": 0.2697735626,
+    "itm_rate": 0.4908109089,
+    "avg_prob_itm": 0.4931250406,
+    "return_per_dollar": -0.0567842881,
+    "ci_low": -0.1107366296,
+    "ci_high": 0.0047419141,
+    "ex_best_day": -0.0754476573
+   },
+   {
+    "within": "middle",
+    "trades": 21994,
+    "days": 546,
+    "win_rate": 0.2794853142,
+    "itm_rate": 0.5053196326,
+    "avg_prob_itm": 0.5015104322,
+    "return_per_dollar": -0.0749589087,
+    "ci_low": -0.1018385317,
+    "ci_high": -0.0494149186,
+    "ex_best_day": -0.0795620012
+   },
+   {
+    "within": "upper third",
+    "trades": 22014,
+    "days": 536,
+    "win_rate": 0.2674207323,
+    "itm_rate": 0.5009539384,
+    "avg_prob_itm": 0.5040611333,
+    "return_per_dollar": -0.0708054137,
+    "ci_low": -0.1187168469,
+    "ci_high": -0.0099004813,
+    "ex_best_day": -0.0890642302
+   }
+  ],
+  "ml_ratio_within_group": [
+   {
+    "mlr": "ML: smaller move",
+    "trades": 22037,
+    "days": 400,
+    "win_rate": 0.2634206108,
+    "itm_rate": 0.4980714253,
+    "avg_prob_itm": 0.4983059843,
+    "return_per_dollar": -0.0974190267,
+    "ci_low": -0.1392239982,
+    "ci_high": -0.0541642341,
+    "ex_best_day": -0.117978167
+   },
+   {
+    "mlr": "about equal",
+    "trades": 21994,
+    "days": 456,
+    "win_rate": 0.2781667728,
+    "itm_rate": 0.4985905247,
+    "avg_prob_itm": 0.4997564674,
+    "return_per_dollar": -0.0426538266,
+    "ci_low": -0.0925237783,
+    "ci_high": 0.0149847422,
+    "ex_best_day": -0.0693064653
+   },
+   {
+    "mlr": "ML: bigger move",
+    "trades": 22014,
+    "days": 356,
+    "win_rate": 0.2750976651,
+    "itm_rate": 0.5004088307,
+    "avg_prob_itm": 0.5006271479,
+    "return_per_dollar": -0.0583762279,
+    "ci_low": -0.0871906949,
+    "ci_high": -0.0236629787,
+    "ex_best_day": -0.0707303788
+   }
+  ],
+  "features": [
+   "is_call",
+   "z",
+   "minutes_left",
+   "iv_rel",
+   "atm_iv",
+   "prob_itm",
+   "hist_edge",
+   "ml_ratio",
+   "vix_prev",
+   "move_so_far",
+   "log_price"
+  ]
+ },
+ "exits": {
+  "rules": [
+   {
+    "rule": "by1530",
+    "trades": 80646,
+    "days": 677,
+    "win_rate": 0.2996304838,
+    "itm_rate": 0.498462416,
+    "avg_prob_itm": 0.4990090227,
+    "return_per_dollar": -0.0316121164,
+    "ci_low": -0.0520061533,
+    "ci_high": -0.0089093533,
+    "ex_best_day": -0.0410674377,
+    "label": "Sell by 3:30 PM"
+   },
+   {
+    "rule": "hold",
+    "trades": 80646,
+    "days": 677,
+    "win_rate": 0.2719911713,
+    "itm_rate": 0.498462416,
+    "avg_prob_itm": 0.4990090227,
+    "return_per_dollar": -0.0647290335,
+    "ci_low": -0.0880783078,
+    "ci_high": -0.0365211647,
+    "ex_best_day": -0.0753299461,
+    "label": "Hold to 4 PM"
+   },
+   {
+    "rule": "sl50",
+    "trades": 80646,
+    "days": 677,
+    "win_rate": 0.2283560251,
+    "itm_rate": 0.498462416,
+    "avg_prob_itm": 0.4990090227,
+    "return_per_dollar": -0.0375425512,
+    "ci_low": -0.0611785366,
+    "ci_high": -0.0149307986,
+    "ex_best_day": -0.0455572083,
+    "label": "Cut losses at \u221250%"
+   },
+   {
+    "rule": "tp100",
+    "trades": 80646,
+    "days": 677,
+    "win_rate": 0.3538923195,
+    "itm_rate": 0.498462416,
+    "avg_prob_itm": 0.4990090227,
+    "return_per_dollar": -0.0604417143,
+    "ci_low": -0.0694949899,
+    "ci_high": -0.0509453945,
+    "ex_best_day": -0.0621988986,
+    "label": "Take profit at +100%"
+   },
+   {
+    "rule": "tp100_sl50",
+    "trades": 80646,
+    "days": 677,
+    "win_rate": 0.2925129579,
+    "itm_rate": 0.498462416,
+    "avg_prob_itm": 0.4990090227,
+    "return_per_dollar": -0.0367739151,
+    "ci_low": -0.0457023418,
+    "ci_high": -0.0280465509,
+    "ex_best_day": -0.0380491417,
+    "label": "+100% profit or \u221250% loss"
+   },
+   {
+    "rule": "tp50",
+    "trades": 80646,
+    "days": 677,
+    "win_rate": 0.4302135258,
+    "itm_rate": 0.498462416,
+    "avg_prob_itm": 0.4990090227,
+    "return_per_dollar": -0.056814425,
+    "ci_low": -0.0634081054,
+    "ci_high": -0.0496180779,
+    "ex_best_day": -0.0583889463,
+    "label": "Take profit at +50%"
+   }
+  ],
+  "by_group": [
+   {
+    "group": "far out of the money (0.5+ moves)",
+    "rule": "by1530",
+    "trades": 29348,
+    "days": 677,
+    "win_rate": 0.1328199537,
+    "itm_rate": 0.0891713234,
+    "avg_prob_itm": 0.1368045267,
+    "return_per_dollar": -0.1537606317,
+    "ci_low": -0.2328699778,
+    "ci_high": -0.0724470728,
+    "ex_best_day": -0.1757567206,
+    "label": "Sell by 3:30 PM"
+   },
+   {
+    "group": "far out of the money (0.5+ moves)",
+    "rule": "hold",
+    "trades": 29348,
+    "days": 677,
+    "win_rate": 0.0713166144,
+    "itm_rate": 0.0891713234,
+    "avg_prob_itm": 0.1368045267,
+    "return_per_dollar": -0.3404545903,
+    "ci_low": -0.4413505483,
+    "ci_high": -0.2290521585,
+    "ex_best_day": -0.3838869157,
+    "label": "Hold to 4 PM"
+   },
+   {
+    "group": "far out of the money (0.5+ moves)",
+    "rule": "sl50",
+    "trades": 29348,
+    "days": 677,
+    "win_rate": 0.0438189996,
+    "itm_rate": 0.0891713234,
+    "avg_prob_itm": 0.1368045267,
+    "return_per_dollar": -0.1666430123,
+    "ci_low": -0.2413706603,
+    "ci_high": -0.0873625905,
+    "ex_best_day": -0.2018044192,
+    "label": "Cut losses at \u221250%"
+   },
+   {
+    "group": "far out of the money (0.5+ moves)",
+    "rule": "tp100",
+    "trades": 29348,
+    "days": 677,
+    "win_rate": 0.2277156876,
+    "itm_rate": 0.0891713234,
+    "avg_prob_itm": 0.1368045267,
+    "return_per_dollar": -0.2586974665,
+    "ci_low": -0.2916954023,
+    "ci_high": -0.2257046268,
+    "ex_best_day": -0.2624008262,
+    "label": "Take profit at +100%"
+   },
+   {
+    "group": "far out of the money (0.5+ moves)",
+    "rule": "tp100_sl50",
+    "trades": 29348,
+    "days": 677,
+    "win_rate": 0.1561264822,
+    "itm_rate": 0.0891713234,
+    "avg_prob_itm": 0.1368045267,
+    "return_per_dollar": -0.133454891,
+    "ci_low": -0.1534630824,
+    "ci_high": -0.1112801261,
+    "ex_best_day": -0.1353799804,
+    "label": "+100% profit or \u221250% loss"
+   },
+   {
+    "group": "far out of the money (0.5+ moves)",
+    "rule": "tp50",
+    "trades": 29348,
+    "days": 677,
+    "win_rate": 0.3146040616,
+    "itm_rate": 0.0891713234,
+    "avg_prob_itm": 0.1368045267,
+    "return_per_dollar": -0.2251153786,
+    "ci_low": -0.2504888332,
+    "ci_high": -0.2025647682,
+    "ex_best_day": -0.2284473342,
+    "label": "Take profit at +50%"
+   },
+   {
+    "group": "in the money",
+    "rule": "by1530",
+    "trades": 40197,
+    "days": 677,
+    "win_rate": 0.4225439709,
+    "itm_rate": 0.8303355972,
+    "avg_prob_itm": 0.7897395143,
+    "return_per_dollar": -0.0255236932,
+    "ci_low": -0.0378650525,
+    "ci_high": -0.0126785855,
+    "ex_best_day": -0.0310281536,
+    "label": "Sell by 3:30 PM"
+   },
+   {
+    "group": "in the money",
+    "rule": "hold",
+    "trades": 40197,
+    "days": 677,
+    "win_rate": 0.4234146827,
+    "itm_rate": 0.8303355972,
+    "avg_prob_itm": 0.7897395143,
+    "return_per_dollar": -0.0412341438,
+    "ci_low": -0.0546196994,
+    "ci_high": -0.0247175763,
+    "ex_best_day": -0.0473092203,
+    "label": "Hold to 4 PM"
+   },
+   {
+    "group": "in the money",
+    "rule": "sl50",
+    "trades": 40197,
+    "days": 677,
+    "win_rate": 0.3785108341,
+    "itm_rate": 0.8303355972,
+    "avg_prob_itm": 0.7897395143,
+    "return_per_dollar": -0.0285777883,
+    "ci_low": -0.0433203757,
+    "ci_high": -0.0129022189,
+    "ex_best_day": -0.0331950114,
+    "label": "Cut losses at \u221250%"
+   },
+   {
+    "group": "in the money",
+    "rule": "tp100",
+    "trades": 40197,
+    "days": 677,
+    "win_rate": 0.4416996293,
+    "itm_rate": 0.8303355972,
+    "avg_prob_itm": 0.7897395143,
+    "return_per_dollar": -0.042271053,
+    "ci_low": -0.0487936544,
+    "ci_high": -0.0348399382,
+    "ex_best_day": -0.0435277559,
+    "label": "Take profit at +100%"
+   },
+   {
+    "group": "in the money",
+    "rule": "tp100_sl50",
+    "trades": 40197,
+    "days": 677,
+    "win_rate": 0.3961240889,
+    "itm_rate": 0.8303355972,
+    "avg_prob_itm": 0.7897395143,
+    "return_per_dollar": -0.0296304447,
+    "ci_low": -0.0370730492,
+    "ci_high": -0.0224823524,
+    "ex_best_day": -0.0304854825,
+    "label": "+100% profit or \u221250% loss"
+   },
+   {
+    "group": "in the money",
+    "rule": "tp50",
+    "trades": 40197,
+    "days": 677,
+    "win_rate": 0.4972012837,
+    "itm_rate": 0.8303355972,
+    "avg_prob_itm": 0.7897395143,
+    "return_per_dollar": -0.0416161455,
+    "ci_low": -0.0471217055,
+    "ci_high": -0.0354124591,
+    "ex_best_day": -0.0428577835,
+    "label": "Take profit at +50%"
+   },
+   {
+    "group": "near the money (0\u20130.5 moves out)",
+    "rule": "by1530",
+    "trades": 11101,
+    "days": 677,
+    "win_rate": 0.2955589587,
+    "itm_rate": 0.3787947032,
+    "avg_prob_itm": 0.4038359732,
+    "return_per_dollar": -0.0203924644,
+    "ci_low": -0.1111736902,
+    "ci_high": 0.0821318442,
+    "ex_best_day": -0.0765698567,
+    "label": "Sell by 3:30 PM"
+   },
+   {
+    "group": "near the money (0\u20130.5 moves out)",
+    "rule": "hold",
+    "trades": 11101,
+    "days": 677,
+    "win_rate": 0.2542113323,
+    "itm_rate": 0.3787947032,
+    "avg_prob_itm": 0.4038359732,
+    "return_per_dollar": -0.1393196749,
+    "ci_low": -0.251903087,
+    "ci_high": -0.0106698608,
+    "ex_best_day": -0.2045268795,
+    "label": "Hold to 4 PM"
+   },
+   {
+    "group": "near the money (0\u20130.5 moves out)",
+    "rule": "sl50",
+    "trades": 11101,
+    "days": 677,
+    "win_rate": 0.1725069814,
+    "itm_rate": 0.3787947032,
+    "avg_prob_itm": 0.4038359732,
+    "return_per_dollar": -0.0516056483,
+    "ci_low": -0.1463348647,
+    "ci_high": 0.0344585708,
+    "ex_best_day": -0.1000410717,
+    "label": "Cut losses at \u221250%"
+   },
+   {
+    "group": "near the money (0\u20130.5 moves out)",
+    "rule": "tp100",
+    "trades": 11101,
+    "days": 677,
+    "win_rate": 0.3695162598,
+    "itm_rate": 0.3787947032,
+    "avg_prob_itm": 0.4038359732,
+    "return_per_dollar": -0.1271599863,
+    "ci_low": -0.163099793,
+    "ci_high": -0.0955337022,
+    "ex_best_day": -0.1343146439,
+    "label": "Take profit at +100%"
+   },
+   {
+    "group": "near the money (0\u20130.5 moves out)",
+    "rule": "tp100_sl50",
+    "trades": 11101,
+    "days": 677,
+    "win_rate": 0.2779028916,
+    "itm_rate": 0.3787947032,
+    "avg_prob_itm": 0.4038359732,
+    "return_per_dollar": -0.0517106291,
+    "ci_low": -0.0775500243,
+    "ci_high": -0.0266676275,
+    "ex_best_day": -0.0570258376,
+    "label": "+100% profit or \u221250% loss"
+   },
+   {
+    "group": "near the money (0\u20130.5 moves out)",
+    "rule": "tp50",
+    "trades": 11101,
+    "days": 677,
+    "win_rate": 0.4932888929,
+    "itm_rate": 0.3787947032,
+    "avg_prob_itm": 0.4038359732,
+    "return_per_dollar": -0.1111267693,
+    "ci_low": -0.133268622,
+    "ci_high": -0.0904557667,
+    "ex_best_day": -0.1164256742,
+    "label": "Take profit at +50%"
+   }
+  ],
+  "hold_vs_sell_all": [
+   {
+    "all": "all",
+    "trades": 588117,
+    "days": 677,
+    "win_rate": 0.2792352542,
+    "itm_rate": 0.5367146333,
+    "avg_prob_itm": null,
+    "return_per_dollar": -0.0476045145,
+    "ci_low": -0.0612707016,
+    "ci_high": -0.0327293095,
+    "ex_best_day": -0.054920768
+   }
+  ],
+  "states": 588117
+ }
+}
