@@ -22,3 +22,6 @@ data/cache/
 
 # Claude Code local config
 .claude/
+
+# Private notes (resume bank input)
+RESUME_FACTS.md

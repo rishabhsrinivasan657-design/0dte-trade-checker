@@ -742,3 +742,67 @@ select:focus, .money-input:focus-within { outline: 2px solid var(--accent); outl
 
 @media (max-width: 480px) { .app .ticker { display: none; } .app .topbar-actions { margin-left: auto; } }
 @media (max-width: 1220px) { .app .brand span { display: none; } }
+
+/* ---------- Strategy Lab ---------- */
+.workspace.lab { grid-template-columns: minmax(0, 1fr); }
+.lab-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
+.lab-head h1 { font-size: 22px; letter-spacing: -0.02em; }
+.lab-today { display: flex; gap: 6px; flex-wrap: wrap; }
+.notes:empty { display: none; }
+.lab-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; }
+#s-time { grid-column: 1 / -1; }
+.strat { display: flex; flex-direction: column; gap: 14px; }
+.strat-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.strat-head h2 { font-size: 17px; letter-spacing: -0.01em; }
+.strat-body { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
+.strat-live { padding: 14px 16px; border-radius: 12px; background: var(--surface-2); }
+.strat-live:empty { display: none; }
+.strat h3 { font-size: 13px; font-weight: 650; color: var(--ink-2); margin-bottom: 8px; }
+.live-line { font-size: 14px; color: var(--ink); }
+.setup { margin-top: 12px; }
+.setup .stat-list { margin-top: 10px; }
+.legs { width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
+.legs td { padding: 4px 0; }
+.legs td.num { text-align: right; }
+.legs tr.sell td:first-child { color: var(--critical-text); font-weight: 600; }
+.legs tr.buy td:first-child { color: var(--good-text); font-weight: 600; }
+.stop-rule { display: flex; gap: 8px; margin-top: 10px; font-size: 12px; color: var(--ink-2); }
+.stop-rule svg { width: 14px; height: 14px; flex: none; margin-top: 2px; stroke: currentColor; stroke-width: 2; fill: none; }
+
+.sig { flex: none; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 650; white-space: nowrap; }
+.sig.on { background: var(--good-wash); color: var(--good-text); }
+.sig.info { background: var(--accent-wash); color: var(--accent-ink); }
+.sig.off { background: var(--neutral-wash); color: var(--ink-2); }
+.rating-chip.good { background: var(--good-wash); color: var(--good-text); }
+.rating-chip.neutral { background: var(--accent-wash); color: var(--accent-ink); }
+
+.bt-table { width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
+.bt-table th { text-align: left; font-size: 11px; font-weight: 600; color: var(--muted); padding: 6px 8px; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+.bt-table td { padding: 8px; border-bottom: 1px solid var(--grid); vertical-align: middle; }
+.bt-table tr:last-child td { border-bottom: 0; }
+.bt-table .num { text-align: right; white-space: nowrap; }
+.bt-table .strong { font-weight: 650; }
+.bt-table tr.used td { background: var(--accent-wash); }
+.bt-table tr.used td:first-child { border-radius: 8px 0 0 8px; }
+.bt-table tr.used td:last-child { border-radius: 0 8px 8px 0; }
+.bar-cell { width: 28%; min-width: 90px; }
+.mbar { position: relative; height: 14px; }
+.mbar-zero { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--muted); opacity: 0.5; }
+.mbar-ci { position: absolute; top: 5px; height: 4px; border-radius: 2px; background: var(--neutral-wash); box-shadow: inset 0 0 0 1px var(--grid); }
+.mbar-dot { position: absolute; top: 2px; width: 10px; height: 10px; margin-left: -5px; border-radius: 50%; border: 2px solid var(--surface); }
+.mbar-dot.pos { background: var(--div-pos); }
+.mbar-dot.neg { background: var(--div-neg); }
+.two-up { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+
+@media (max-width: 1100px) { .lab-grid, .two-up { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 640px) {
+  .bar-cell { display: none; }
+  .strat-head { flex-direction: column; }
+}
+.bt-wrap { overflow-x: auto; }
+@media (max-width: 480px) {
+  .app .topbar-inner { padding: 10px 12px; gap: 8px; }
+  .app .nav a { padding: 5px 7px; font-size: 12px; }
+  .app .topbar-actions .icon-btn { width: 32px; height: 32px; }
+  .app .brand { display: none; }
+}

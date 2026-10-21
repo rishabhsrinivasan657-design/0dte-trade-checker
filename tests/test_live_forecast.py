@@ -27,7 +27,11 @@ def test_live_features_match_training_features():
     groups = [spy[spy.index.date == d] for d in days[:-1]]
     train_style = features_at(spy[spy.index.date == today], time(13, 0), [day_stats(g) for g in groups],
                               [rv_from_time(g, time(13, 0)) for g in groups], 20.0, today)
+    vix1d = live.pop("vix1d_prev")
     assert live == pytest.approx(train_style)
+    assert vix1d != vix1d                                              # NaN when VIX1D isn't supplied
+    with_v1d = lf.live_features(spy, 20.0, now, vix1d_prev=14.0)
+    assert with_v1d["vix1d_prev"] == pytest.approx(0.14)               # fraction, like the training data
 
 
 def test_forecast_units():
@@ -56,7 +60,7 @@ def test_api_includes_model_during_session(monkeypatch):
     monkeypatch.setattr(server, "daily_bars", lambda d: None)
     monkeypatch.setattr(server, "intraday_bars", lambda d: None)
     monkeypatch.setitem(server._model, "bundle", bundle)
-    monkeypatch.setitem(server._model, "inputs", (spy, 20.0))
+    monkeypatch.setitem(server._model, "inputs", (spy, 20.0, 15.0))
     monkeypatch.setitem(server._model, "at", float("inf"))           # "fetched in the future" -> never refetch
 
     j = TestClient(server.app).get("/api/check", params={"type": "call", "strike": 772}).json()

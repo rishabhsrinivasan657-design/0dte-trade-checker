@@ -112,7 +112,7 @@ def test_spy_chart_endpoint(client, monkeypatch):
     from tests.test_move_model import random_spy
     spy, _ = random_spy(30, seed=7)
     last_day = sorted(set(spy.index.date))[-1]
-    monkeypatch.setattr(server, "live_inputs", lambda: (spy, 0.17))
+    monkeypatch.setattr(server, "live_inputs", lambda: (spy, 0.17, 0.15))
     j = client.get("/api/spy").json()
     assert j["date"] == str(last_day)                       # market snapshot is a different day -> last session
     assert len(j["bars"]) == 78 and j["bars"][0]["t"] == "09:30"

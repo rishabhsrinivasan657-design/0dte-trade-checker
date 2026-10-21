@@ -8,9 +8,10 @@
 3. [Words you'll see](#3-words-youll-see)
 4. [Page 1: Checker (before you buy)](#4-page-1-checker-before-you-buy)
 5. [Page 2: Track (after you buy)](#5-page-2-track-after-you-buy)
-6. [Page 3: Research (does any of this work?)](#6-page-3-research-does-any-of-this-work)
-7. [Common questions](#7-common-questions)
-8. [Limitations](#8-limitations)
+6. [Page 3: Strategies (which strategies work?)](#6-page-3-strategies-which-strategies-work)
+7. [Page 4: Research (does any of this work?)](#7-page-4-research-does-any-of-this-work)
+8. [Common questions](#8-common-questions)
+9. [Limitations](#9-limitations)
 
 ---
 
@@ -18,15 +19,16 @@
 
 "0DTE" means **zero days to expiry**: SPY options that expire **today at 4:00 PM ET**. They're cheap, fast, and risky.
 
-The app has three pages, switched with the buttons at the top:
+The app has four pages, switched with the buttons at the top:
 
 | Page | Use it… | It answers |
 |---|---|---|
 | **Checker** | before you buy | *Where does SPY need to go, how likely is that, and what happened to trades like this before?* |
 | **Track** | after you buy | *How am I doing right now, and should I hold or sell?* |
+| **Strategies** | any time | *Which 0DTE strategies actually made money after costs, and is today a signal day?* |
 | **Research** | any time | *Does any of this actually work?* Results from about 80,000 simulated past trades. |
 
-Prices update automatically: every 30 seconds on Checker, and every 15 seconds on Track. The numbers will change while you watch; that's normal for 0DTE.
+Prices update automatically: every 30 seconds on Checker, and every 15 seconds on Track, and every 30 seconds on Strategies. The numbers will change while you watch; that's normal for 0DTE.
 
 ## 2. Quick start (2 minutes)
 
@@ -124,7 +126,31 @@ Every strike within $8 of SPY with its cost per contract, realistic odds of prof
 
 **After 4 PM** the position has expired. The page says so instead of showing a misleading profit; pick a strike from the next expiry to track a new position.
 
-## 6. Page 3: Research (does any of this work?)
+## 6. Page 3: Strategies (which strategies work?)
+
+Four 0DTE strategies, each tested on 680 days of real option trades. Each card has two halves:
+
+- **Top (grey box): today's setup.** Shown only while the market is open. It lists the exact legs to sell and buy, the credit, the most you can lose, and the range SPY must stay in.
+- **Bottom: the backtest.** One row per version. **Return per $1 risked** is after trading costs. The **dot** is the average and the **faint bar** is the range luck alone could produce. The chip gives the verdict:
+
+| Chip | Meaning |
+|---|---|
+| **Worked after costs** (green) | Even the unlucky end of the range is above $0 |
+| **Within luck** (blue) | Made money on average, but luck could explain it |
+| **Only before costs** (orange) | Trading costs ate the profit |
+| **Did not work** (red) | Lost money |
+| **Too few days** (grey) | Under 20 days of data, so we can't tell |
+
+| Card | Strategy | What we found |
+|---|---|---|
+| ML-gated premium selling | Sell an iron condor only when our ML expects a smaller move than the options price. The badge says **Sell signal** when that's true right now | Condors sold on the ML's signal made **+6.7%** per $1 risked, about 5× the other days |
+| Breakeven iron condor | Popular rule: ~12-delta condor, close a side when it costs the whole credit | The stop **made it worse**. Holding to 4 PM did better |
+| Intraday momentum | SPY's direction by 10:00 predicts the last 30 minutes | **No effect** in our data |
+| Timing & event days | The same condor by entry hour and on Fed / CPI days | Afternoon entries did best. Fed / CPI samples are small |
+
+> Selling options can lose many times the credit. The straddle note on the first card shows the worst single trade (−$3,900 per contract).
+
+## 7. Page 4: Research (does any of this work?)
 
 Results from the **2.5-year backtest** and the **ML model** tests. Every headline sentence is calculated from the data.
 
@@ -148,7 +174,7 @@ Results from the **2.5-year backtest** and the **ML model** tests. Every headlin
 - **"Sell by 3:30 PM"** roughly **halved the average loss** compared with holding to 4 PM (about 3¢ vs 6¢ per $1).
 - The market's odds are slightly **too high for long shots** and **too low for safe bets**; the "realistic chance" corrects this.
 
-## 7. Common questions
+## 8. Common questions
 
 **Why do the numbers keep changing?**
 SPY moves every second, and 0DTE options react strongly. The app refreshes every 15–30 seconds. Focus on the patterns (breakeven vs expected move, the evidence cards), which change slowly, rather than the exact cents.
@@ -168,7 +194,7 @@ Prices in the final minutes include risk the model can't see (after-hours moves 
 **Can I trust the ML model?**
 Its move forecasts lost to the market's in testing. Its *Expensive* flag was useful. The Research page shows both, so you can judge.
 
-## 8. Limitations
+## 9. Limitations
 
 - Free data: option quotes are **indicative** (Alpaca) or **~15 min delayed** (Yahoo fallback), not the official OPRA feed.
 - The backtest used past **trade prices** (historical bid/ask isn't free), so trading costs are estimated.

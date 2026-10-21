@@ -1,37 +1,37 @@
 {
- "generated": "2026-10-16T12:04-04:00",
+ "generated": "2026-10-20T18:10-04:00",
  "spy_range": [
   "2018-01-02",
-  "2026-10-14"
+  "2026-10-19"
  ],
  "options_range": [
   "2024-02-01",
-  "2026-10-14"
+  "2026-10-19"
  ],
  "ml": {
-  "rows": 26220,
-  "days": 2185,
+  "rows": 26256,
+  "days": 2188,
   "overall": [
    {
     "model": "seasonal",
-    "qlike": 0.5118206567,
-    "log_mae": 0.8450610817,
-    "within_1sd": 0.7427174976,
-    "n": 20460
+    "qlike": 0.5117146593,
+    "log_mae": 0.8446692318,
+    "within_1sd": 0.7424375488,
+    "n": 20496
    },
    {
     "model": "har",
-    "qlike": 0.3643635706,
-    "log_mae": 0.6110203496,
-    "within_1sd": 0.7213587488,
-    "n": 20460
+    "qlike": 0.3641411955,
+    "log_mae": 0.6110251034,
+    "within_1sd": 0.7212138954,
+    "n": 20496
    },
    {
     "model": "gbm",
-    "qlike": 0.3582295389,
-    "log_mae": 0.6280273306,
-    "within_1sd": 0.7183284457,
-    "n": 20460
+    "qlike": 0.3581690628,
+    "log_mae": 0.6278787048,
+    "within_1sd": 0.7181889149,
+    "n": 20496
    }
   ],
   "by_year": [
@@ -182,26 +182,26 @@
    {
     "year": 2026,
     "model": "seasonal",
-    "qlike": 0.457504939,
-    "log_mae": 0.8810857033,
-    "within_1sd": 0.7804568528,
-    "n": 2364
+    "qlike": 0.4574144576,
+    "log_mae": 0.8771989355,
+    "within_1sd": 0.7775,
+    "n": 2400
    },
    {
     "year": 2026,
     "model": "har",
-    "qlike": 0.3093805457,
-    "log_mae": 0.6721500394,
-    "within_1sd": 0.7872250423,
-    "n": 2364
+    "qlike": 0.3083062077,
+    "log_mae": 0.671273691,
+    "within_1sd": 0.785,
+    "n": 2400
    },
    {
     "year": 2026,
     "model": "gbm",
-    "qlike": 0.3168138336,
-    "log_mae": 0.6983774223,
-    "within_1sd": 0.7906091371,
-    "n": 2364
+    "qlike": 0.3169186038,
+    "log_mae": 0.6960529073,
+    "within_1sd": 0.7883333333,
+    "n": 2400
    }
   ],
   "features": [
@@ -219,274 +219,281 @@
   ]
  },
  "model_vs_market": {
-  "moments": 4045,
+  "moments": 4063,
   "scores": [
    {
     "model": "market (ATM implied vol)",
-    "qlike": 0.1994493774,
-    "log_mae": 0.5527082611,
-    "within_1sd": 0.7826946848,
-    "n": 4045
+    "qlike": 0.1995081489,
+    "log_mae": 0.5524047219,
+    "within_1sd": 0.7824267782,
+    "n": 4063
    },
    {
     "model": "seasonal",
-    "qlike": 0.5723474444,
-    "log_mae": 0.8902816138,
-    "within_1sd": 0.7755253399,
-    "n": 4045
+    "qlike": 0.5719046814,
+    "log_mae": 0.8890562265,
+    "within_1sd": 0.7747969481,
+    "n": 4063
    },
    {
     "model": "har",
-    "qlike": 0.3913121874,
-    "log_mae": 0.6203699213,
-    "within_1sd": 0.7480840544,
-    "n": 4045
+    "qlike": 0.3905289196,
+    "log_mae": 0.6201679995,
+    "within_1sd": 0.7477233571,
+    "n": 4063
    },
    {
     "model": "gbm",
-    "qlike": 0.3299618156,
-    "log_mae": 0.6233579908,
-    "within_1sd": 0.7577255871,
-    "n": 4045
+    "qlike": 0.3296965567,
+    "log_mae": 0.6227436443,
+    "within_1sd": 0.7573221757,
+    "n": 4063
+   },
+   {
+    "model": "gbm_vix1d",
+    "qlike": 0.2862883532,
+    "log_mae": 0.623762833,
+    "within_1sd": 0.7605217819,
+    "n": 4063
    },
    {
     "model": "blend (market \u00d7 gbm)",
-    "qlike": 0.216398586,
-    "log_mae": 0.5525401108,
-    "within_1sd": 0.7713226205,
-    "n": 4045
+    "qlike": 0.216390637,
+    "log_mae": 0.5520548297,
+    "within_1sd": 0.7708589712,
+    "n": 4063
    }
   ]
  },
  "backtest": {
-  "trades": 80646,
-  "days": 677,
+  "trades": 81006,
+  "days": 680,
   "all": [
    {
     "all": "all trades",
-    "trades": 80646,
-    "days": 677,
-    "win_rate": 0.2719911713,
-    "itm_rate": 0.498462416,
-    "avg_prob_itm": 0.4990090227,
-    "return_per_dollar": -0.0647290335,
-    "ci_low": -0.089065912,
-    "ci_high": -0.0380358296,
-    "ex_best_day": -0.0753299461
+    "trades": 81006,
+    "days": 680,
+    "win_rate": 0.27215268,
+    "itm_rate": 0.4984692492,
+    "avg_prob_itm": 0.4990134267,
+    "return_per_dollar": -0.0640382387,
+    "ci_low": -0.0924210648,
+    "ci_high": -0.0358982548,
+    "ex_best_day": -0.0745897268
    }
   ],
   "by_history_verdict": [
    {
     "verdict": "Cheap",
-    "trades": 20188,
-    "days": 677,
-    "win_rate": 0.3598672479,
-    "itm_rate": 0.6618783436,
-    "avg_prob_itm": 0.6329439649,
-    "return_per_dollar": -0.0538435197,
-    "ci_low": -0.0870822148,
-    "ci_high": -0.0177555397,
-    "ex_best_day": -0.0706476927
+    "trades": 20306,
+    "days": 680,
+    "win_rate": 0.3601398601,
+    "itm_rate": 0.6627597754,
+    "avg_prob_itm": 0.6337487226,
+    "return_per_dollar": -0.0540568514,
+    "ci_low": -0.0883660169,
+    "ci_high": -0.0165287511,
+    "ex_best_day": -0.0707517122
    },
    {
     "verdict": "Expensive",
-    "trades": 20186,
-    "days": 677,
-    "win_rate": 0.2067274349,
-    "itm_rate": 0.3369166749,
-    "avg_prob_itm": 0.3669457127,
-    "return_per_dollar": -0.099782113,
-    "ci_low": -0.1882106607,
-    "ci_high": -0.0149580727,
-    "ex_best_day": -0.1289913438
+    "trades": 20304,
+    "days": 680,
+    "win_rate": 0.2064125296,
+    "itm_rate": 0.3360421592,
+    "avg_prob_itm": 0.3661415168,
+    "return_per_dollar": -0.0999566445,
+    "ci_low": -0.1827703736,
+    "ci_high": -0.0226011671,
+    "ex_best_day": -0.1290933431
    },
    {
     "verdict": "Fair",
-    "trades": 40272,
-    "days": 677,
-    "win_rate": 0.2606525626,
-    "itm_rate": 0.4975168852,
-    "avg_prob_itm": 0.4980642313,
-    "return_per_dollar": -0.0623790834,
-    "ci_low": -0.0768383049,
-    "ci_high": -0.0483136672,
-    "ex_best_day": -0.0645990928
+    "trades": 40396,
+    "days": 680,
+    "win_rate": 0.2609664323,
+    "itm_rate": 0.4975245074,
+    "avg_prob_itm": 0.4980701734,
+    "return_per_dollar": -0.0607949364,
+    "ci_low": -0.0748835022,
+    "ci_high": -0.046083688,
+    "ex_best_day": -0.0630057934
    }
   ],
   "by_model_verdict": [
    {
     "model_verdict": "Cheap",
-    "trades": 10578,
-    "days": 651,
-    "win_rate": 0.3894876158,
-    "itm_rate": 0.7468330497,
-    "avg_prob_itm": 0.6918832106,
-    "return_per_dollar": -0.0459641989,
-    "ci_low": -0.0713544491,
-    "ci_high": -0.0137910503,
-    "ex_best_day": -0.0584730983
+    "trades": 10318,
+    "days": 652,
+    "win_rate": 0.3797247529,
+    "itm_rate": 0.7350261679,
+    "avg_prob_itm": 0.6808428702,
+    "return_per_dollar": -0.0573105266,
+    "ci_low": -0.0814298507,
+    "ci_high": -0.0313109474,
+    "ex_best_day": -0.0632082124
    },
    {
     "model_verdict": "Expensive",
-    "trades": 10583,
-    "days": 651,
-    "win_rate": 0.1436265709,
-    "itm_rate": 0.2524803931,
-    "avg_prob_itm": 0.3080464117,
-    "return_per_dollar": -0.1770634878,
-    "ci_low": -0.2583554083,
-    "ci_high": -0.0756718415,
-    "ex_best_day": -0.2207407731
+    "trades": 10318,
+    "days": 652,
+    "win_rate": 0.1427602248,
+    "itm_rate": 0.2640046521,
+    "avg_prob_itm": 0.3189621362,
+    "return_per_dollar": -0.2000499953,
+    "ci_low": -0.275249286,
+    "ci_high": -0.1178500326,
+    "ex_best_day": -0.2326131351
    },
    {
     "model_verdict": "Fair",
-    "trades": 59485,
-    "days": 676,
-    "win_rate": 0.2739346054,
-    "itm_rate": 0.498058334,
-    "avg_prob_itm": 0.4986851453,
-    "return_per_dollar": -0.0600865712,
-    "ci_low": -0.0901933809,
-    "ci_high": -0.0264561155,
-    "ex_best_day": -0.0746122502
+    "trades": 60370,
+    "days": 680,
+    "win_rate": 0.2758820606,
+    "itm_rate": 0.4981116449,
+    "avg_prob_itm": 0.4987095178,
+    "return_per_dollar": -0.0539454526,
+    "ci_low": -0.0865811548,
+    "ci_high": -0.0203335926,
+    "ex_best_day": -0.0682197956
    }
   ],
   "by_otm": [
    {
     "bucket": "$0\u20131 OTM",
-    "trades": 8085,
-    "days": 677,
-    "win_rate": 0.254174397,
-    "itm_rate": 0.3850340136,
-    "avg_prob_itm": 0.411288027,
-    "return_per_dollar": -0.1639633667,
-    "ci_low": -0.2209184115,
-    "ci_high": -0.1012475212,
-    "ex_best_day": -0.1853906784
+    "trades": 8121,
+    "days": 680,
+    "win_rate": 0.2545253048,
+    "itm_rate": 0.3851742396,
+    "avg_prob_itm": 0.4113304506,
+    "return_per_dollar": -0.1621774437,
+    "ci_low": -0.2267782399,
+    "ci_high": -0.0963516807,
+    "ex_best_day": -0.1834967908
    },
    {
     "bucket": "$1\u20132 OTM",
-    "trades": 8085,
-    "days": 677,
-    "win_rate": 0.1586889301,
-    "itm_rate": 0.2185528757,
-    "avg_prob_itm": 0.2666907275,
-    "return_per_dollar": -0.2153994094,
-    "ci_low": -0.2936580627,
-    "ci_high": -0.1242688182,
-    "ex_best_day": -0.2491460776
+    "trades": 8121,
+    "days": 680,
+    "win_rate": 0.1588474326,
+    "itm_rate": 0.2188154168,
+    "avg_prob_itm": 0.2667640651,
+    "return_per_dollar": -0.2130349291,
+    "ci_low": -0.3051263504,
+    "ci_high": -0.1334435258,
+    "ex_best_day": -0.2466119185
    },
    {
     "bucket": "$2\u20133 OTM",
-    "trades": 8078,
-    "days": 677,
-    "win_rate": 0.095939589,
-    "itm_rate": 0.1206981926,
-    "avg_prob_itm": 0.1730494429,
-    "return_per_dollar": -0.2531622683,
-    "ci_low": -0.3762343568,
-    "ci_high": -0.1338909174,
-    "ex_best_day": -0.3039664133
+    "trades": 8114,
+    "days": 680,
+    "win_rate": 0.0962533892,
+    "itm_rate": 0.1209021444,
+    "avg_prob_itm": 0.1731027864,
+    "return_per_dollar": -0.2502565234,
+    "ci_low": -0.381383268,
+    "ci_high": -0.1250149077,
+    "ex_best_day": -0.3008125898
    },
    {
     "bucket": "$3\u20135 OTM",
-    "trades": 16115,
-    "days": 677,
-    "win_rate": 0.0479056779,
-    "itm_rate": 0.057337884,
-    "avg_prob_itm": 0.097770368,
-    "return_per_dollar": -0.2825851065,
-    "ci_low": -0.4480761293,
-    "ci_high": -0.0783795391,
-    "ex_best_day": -0.3672560835
+    "trades": 16187,
+    "days": 680,
+    "win_rate": 0.0481250386,
+    "itm_rate": 0.05751529,
+    "avg_prob_itm": 0.0977862193,
+    "return_per_dollar": -0.2791543458,
+    "ci_low": -0.4541261613,
+    "ci_high": -0.0770183084,
+    "ex_best_day": -0.3634389
    }
   ],
   "by_time": [
    {
     "time": "10:00",
-    "trades": 13502,
-    "days": 675,
-    "win_rate": 0.2984743001,
-    "itm_rate": 0.4995556214,
-    "avg_prob_itm": 0.4999914423,
-    "return_per_dollar": -0.0622524025,
-    "ci_low": -0.1007437828,
-    "ci_high": -0.0235578655,
-    "ex_best_day": -0.0736940565
+    "trades": 13562,
+    "days": 678,
+    "win_rate": 0.2986285209,
+    "itm_rate": 0.4995575874,
+    "avg_prob_itm": 0.4999914802,
+    "return_per_dollar": -0.0600805519,
+    "ci_low": -0.0942184743,
+    "ci_high": -0.0240265563,
+    "ex_best_day": -0.0714617066
    },
    {
     "time": "11:00",
-    "trades": 13497,
-    "days": 676,
-    "win_rate": 0.2819144995,
-    "itm_rate": 0.4993702304,
-    "avg_prob_itm": 0.4998186405,
-    "return_per_dollar": -0.0608892886,
-    "ci_low": -0.0992680395,
-    "ci_high": -0.0168439338,
-    "ex_best_day": -0.0765333603
+    "trades": 13557,
+    "days": 679,
+    "win_rate": 0.2822895921,
+    "itm_rate": 0.4993730176,
+    "avg_prob_itm": 0.4998194432,
+    "return_per_dollar": -0.0592440736,
+    "ci_low": -0.0970698723,
+    "ci_high": -0.0164616658,
+    "ex_best_day": -0.0748135855
    },
    {
     "time": "12:00",
-    "trades": 13507,
-    "days": 677,
-    "win_rate": 0.273043607,
-    "itm_rate": 0.4984082328,
-    "avg_prob_itm": 0.4990414058,
-    "return_per_dollar": -0.0618650804,
-    "ci_low": -0.0998457087,
-    "ci_high": -0.0231438857,
-    "ex_best_day": -0.0783436135
+    "trades": 13567,
+    "days": 680,
+    "win_rate": 0.2734576546,
+    "itm_rate": 0.4984152724,
+    "avg_prob_itm": 0.4990456452,
+    "return_per_dollar": -0.0615443004,
+    "ci_low": -0.0984024049,
+    "ci_high": -0.0223950625,
+    "ex_best_day": -0.0779503021
    },
    {
     "time": "13:00",
-    "trades": 13462,
-    "days": 676,
-    "win_rate": 0.2654880404,
-    "itm_rate": 0.4979943545,
-    "avg_prob_itm": 0.4985931481,
-    "return_per_dollar": -0.0682959184,
-    "ci_low": -0.0994109947,
-    "ci_high": -0.0338421025,
-    "ex_best_day": -0.0831524886
+    "trades": 13522,
+    "days": 679,
+    "win_rate": 0.2657890845,
+    "itm_rate": 0.498003254,
+    "avg_prob_itm": 0.4985993906,
+    "return_per_dollar": -0.0682229391,
+    "ci_low": -0.101559573,
+    "ci_high": -0.034483215,
+    "ex_best_day": -0.0830153833
    },
    {
     "time": "14:00",
-    "trades": 13363,
-    "days": 671,
-    "win_rate": 0.256304722,
-    "itm_rate": 0.4980169124,
-    "avg_prob_itm": 0.4985920809,
-    "return_per_dollar": -0.0775850371,
-    "ci_low": -0.0981337207,
-    "ci_high": -0.0554562813,
-    "ex_best_day": -0.0851654855
+    "trades": 13423,
+    "days": 674,
+    "win_rate": 0.2558295463,
+    "itm_rate": 0.4980257767,
+    "avg_prob_itm": 0.4985983742,
+    "return_per_dollar": -0.0781446349,
+    "ci_low": -0.0986596846,
+    "ci_high": -0.0559250453,
+    "ex_best_day": -0.0856918103
    },
    {
     "time": "15:00",
-    "trades": 13315,
-    "days": 670,
-    "win_rate": 0.2563274502,
-    "itm_rate": 0.4974089373,
-    "avg_prob_itm": 0.4979981819,
-    "return_per_dollar": -0.0585868752,
-    "ci_low": -0.0739912521,
-    "ci_high": -0.0409607384,
-    "ex_best_day": -0.0629035174
+    "trades": 13375,
+    "days": 673,
+    "win_rate": 0.2565233645,
+    "itm_rate": 0.4974205607,
+    "avg_prob_itm": 0.498007162,
+    "return_per_dollar": -0.0586801263,
+    "ci_low": -0.073559528,
+    "ci_high": -0.0417889164,
+    "ex_best_day": -0.0629775785
    }
   ],
   "cost_sensitivity": [
    {
     "spread_multiplier": 0,
-    "return_per_dollar": -0.05364311081804827
+    "return_per_dollar": -0.052944243416973694
    },
    {
     "spread_multiplier": 1,
-    "return_per_dollar": -0.06472903348508656
+    "return_per_dollar": -0.06403823869188659
    },
    {
     "spread_multiplier": 2,
-    "return_per_dollar": -0.07555823547939408
+    "return_per_dollar": -0.07487532896646702
    }
   ]
  },
@@ -494,380 +501,380 @@
   "by_signal": [
    {
     "signal": "model says smaller move",
-    "trades": 1345,
-    "days": 413,
-    "win_rate": 0.2855018587,
-    "itm_rate": 0.9962825279,
+    "trades": 1351,
+    "days": 420,
+    "win_rate": 0.274611399,
+    "itm_rate": 0.9955588453,
     "avg_prob_itm": null,
-    "return_per_dollar": -0.2034243493,
-    "ci_low": -0.2717157383,
-    "ci_high": -0.1355629211,
-    "ex_best_day": -0.232441472
+    "return_per_dollar": -0.2301444813,
+    "ci_low": -0.2925733835,
+    "ci_high": -0.1552519506,
+    "ex_best_day": -0.2580382533
    },
    {
     "signal": "about equal",
-    "trades": 1345,
-    "days": 490,
-    "win_rate": 0.3375464684,
-    "itm_rate": 0.9940520446,
+    "trades": 1350,
+    "days": 487,
+    "win_rate": 0.3414814815,
+    "itm_rate": 0.9948148148,
     "avg_prob_itm": null,
-    "return_per_dollar": -0.0765181336,
-    "ci_low": -0.1516421032,
-    "ci_high": 0.0181373741,
-    "ex_best_day": -0.1103935746
+    "return_per_dollar": -0.0456706644,
+    "ci_low": -0.1365650444,
+    "ci_high": 0.0674000084,
+    "ex_best_day": -0.0926325244
    },
    {
     "signal": "model says bigger move",
-    "trades": 1345,
-    "days": 380,
-    "win_rate": 0.3353159851,
+    "trades": 1351,
+    "days": 384,
+    "win_rate": 0.3441894893,
     "itm_rate": 1.0,
     "avg_prob_itm": null,
-    "return_per_dollar": -0.1186920357,
-    "ci_low": -0.1863741258,
-    "ci_high": -0.0555436168,
-    "ex_best_day": -0.1355143052
+    "return_per_dollar": -0.1070064778,
+    "ci_low": -0.1618531771,
+    "ci_high": -0.0560865225,
+    "ex_best_day": -0.1166751086
    }
   ],
   "ratio_bounds": [
    {
     "signal": "model says smaller move",
-    "min": 0.2279257447,
-    "max": 0.8670695063
+    "min": 0.2359197893,
+    "max": 0.8781136698
    },
    {
     "signal": "about equal",
-    "min": 0.8671186623,
-    "max": 1.0519848976
+    "min": 0.8782265354,
+    "max": 1.0558762178
    },
    {
     "signal": "model says bigger move",
-    "min": 1.0527092503,
-    "max": 8.2825597273
+    "min": 1.0559803141,
+    "max": 5.3401462459
    }
   ],
-  "n": 4035
+  "n": 4052
  },
  "calibration": {
   "market": [
    {
-    "predicted": 0.0297606545,
-    "actual": 0.0067193012,
-    "n": 5953
+    "predicted": 0.0297685253,
+    "actual": 0.0067057837,
+    "n": 5965
    },
    {
-    "predicted": 0.0735991063,
-    "actual": 0.0264644183,
-    "n": 6197
+    "predicted": 0.0736113714,
+    "actual": 0.0264890031,
+    "n": 6229
    },
    {
-    "predicted": 0.1471003334,
-    "actual": 0.0926368375,
-    "n": 9208
+    "predicted": 0.1470991145,
+    "actual": 0.0928146948,
+    "n": 9255
    },
    {
-    "predicted": 0.2481373324,
-    "actual": 0.1904237755,
-    "n": 7268
+    "predicted": 0.2480955928,
+    "actual": 0.1906327034,
+    "n": 7302
    },
    {
-    "predicted": 0.3489001775,
-    "actual": 0.3070074196,
-    "n": 6065
+    "predicted": 0.3488690347,
+    "actual": 0.3072378139,
+    "n": 6093
    },
    {
-    "predicted": 0.4495305017,
-    "actual": 0.436920385,
-    "n": 5715
+    "predicted": 0.449481607,
+    "actual": 0.4371299199,
+    "n": 5742
    },
    {
-    "predicted": 0.5504629288,
-    "actual": 0.5604549431,
-    "n": 5715
+    "predicted": 0.5505118544,
+    "actual": 0.5602577499,
+    "n": 5742
    },
    {
-    "predicted": 0.6511057943,
-    "actual": 0.6912298055,
-    "n": 6066
+    "predicted": 0.6511369045,
+    "actual": 0.6910075484,
+    "n": 6094
    },
    {
-    "predicted": 0.7518625847,
-    "actual": 0.8084227911,
-    "n": 7266
+    "predicted": 0.7519043361,
+    "actual": 0.8082191781,
+    "n": 7300
    },
    {
-    "predicted": 0.8528965326,
-    "actual": 0.9068403909,
-    "n": 9210
+    "predicted": 0.8528977672,
+    "actual": 0.9066652263,
+    "n": 9257
    },
    {
-    "predicted": 0.9263977096,
-    "actual": 0.9731825525,
-    "n": 6190
+    "predicted": 0.926385447,
+    "actual": 0.9731597557,
+    "n": 6222
    },
    {
-    "predicted": 0.9698944582,
-    "actual": 0.9930951148,
-    "n": 5793
+    "predicted": 0.9698870833,
+    "actual": 0.9931093885,
+    "n": 5805
    }
   ],
   "history": [
    {
-    "predicted": 0.0254765225,
-    "actual": 0.0405334728,
-    "n": 11472
+    "predicted": 0.0254723522,
+    "actual": 0.0403882822,
+    "n": 11538
    },
    {
-    "predicted": 0.0824436263,
-    "actual": 0.08835711,
-    "n": 6519
+    "predicted": 0.0824478372,
+    "actual": 0.0890076336,
+    "n": 6550
    },
    {
-    "predicted": 0.1531716277,
-    "actual": 0.1443990002,
-    "n": 8802
+    "predicted": 0.1531790054,
+    "actual": 0.1447815259,
+    "n": 8834
    },
    {
-    "predicted": 0.2556576314,
-    "actual": 0.2472257595,
-    "n": 5497
+    "predicted": 0.2556803769,
+    "actual": 0.2478709911,
+    "n": 5519
    },
    {
-    "predicted": 0.3573029483,
-    "actual": 0.3504061372,
-    "n": 4432
+    "predicted": 0.3572771536,
+    "actual": 0.3501123596,
+    "n": 4450
    },
    {
-    "predicted": 0.4570100503,
-    "actual": 0.4547738693,
-    "n": 3980
+    "predicted": 0.457009853,
+    "actual": 0.4556613226,
+    "n": 3992
    },
    {
-    "predicted": 0.5587006484,
-    "actual": 0.5626692933,
-    "n": 4061
+    "predicted": 0.5587137948,
+    "actual": 0.5621011291,
+    "n": 4074
    },
    {
-    "predicted": 0.6591892483,
-    "actual": 0.6643356643,
-    "n": 4576
+    "predicted": 0.659223794,
+    "actual": 0.6642002176,
+    "n": 4595
    },
    {
-    "predicted": 0.761467995,
-    "actual": 0.7672621092,
-    "n": 5822
+    "predicted": 0.7614570858,
+    "actual": 0.7664670659,
+    "n": 5845
    },
    {
-    "predicted": 0.8635496052,
-    "actual": 0.8669412976,
-    "n": 9710
+    "predicted": 0.8635654939,
+    "actual": 0.8667555647,
+    "n": 9749
    },
    {
-    "predicted": 0.9345550357,
-    "actual": 0.9295335318,
-    "n": 7053
+    "predicted": 0.9345766935,
+    "actual": 0.929065012,
+    "n": 7091
    },
    {
-    "predicted": 0.9816192769,
-    "actual": 0.9629672094,
-    "n": 8722
+    "predicted": 0.9816398677,
+    "actual": 0.9631656973,
+    "n": 8769
    }
   ],
   "model": [
    {
-    "predicted": 0.0156848017,
-    "actual": 0.0193354609,
-    "n": 10654
+    "predicted": 0.016176498,
+    "actual": 0.0173624659,
+    "n": 10252
    },
    {
-    "predicted": 0.0740829129,
-    "actual": 0.057461587,
-    "n": 4751
+    "predicted": 0.0737907464,
+    "actual": 0.0508615321,
+    "n": 4817
    },
    {
-    "predicted": 0.1485031629,
-    "actual": 0.1126778953,
-    "n": 7659
+    "predicted": 0.1481962375,
+    "actual": 0.1112379503,
+    "n": 7884
    },
    {
-    "predicted": 0.2491645576,
-    "actual": 0.204193397,
-    "n": 6391
+    "predicted": 0.2490298159,
+    "actual": 0.2052980132,
+    "n": 6493
    },
    {
-    "predicted": 0.3497690172,
-    "actual": 0.3242369838,
-    "n": 5570
+    "predicted": 0.349457875,
+    "actual": 0.3218309859,
+    "n": 5680
    },
    {
-    "predicted": 0.4497115972,
-    "actual": 0.4363501208,
-    "n": 5381
+    "predicted": 0.449603441,
+    "actual": 0.4355311355,
+    "n": 5460
    },
    {
-    "predicted": 0.5502841283,
-    "actual": 0.5610481323,
-    "n": 5381
+    "predicted": 0.5503840128,
+    "actual": 0.5616413263,
+    "n": 5459
    },
    {
-    "predicted": 0.650223167,
-    "actual": 0.6741472172,
-    "n": 5570
+    "predicted": 0.65053188,
+    "actual": 0.6763463569,
+    "n": 5682
    },
    {
-    "predicted": 0.7508272541,
-    "actual": 0.7942419027,
-    "n": 6391
+    "predicted": 0.7509802202,
+    "actual": 0.7936239027,
+    "n": 6493
    },
    {
-    "predicted": 0.8514906047,
-    "actual": 0.8868293956,
-    "n": 7661
+    "predicted": 0.8518058339,
+    "actual": 0.8880152188,
+    "n": 7885
    },
    {
-    "predicted": 0.9259067482,
-    "actual": 0.9418702612,
-    "n": 4748
+    "predicted": 0.9262089805,
+    "actual": 0.9489202658,
+    "n": 4816
    },
    {
-    "predicted": 0.9841283385,
-    "actual": 0.9802650396,
-    "n": 10489
+    "predicted": 0.9836302532,
+    "actual": 0.9822508676,
+    "n": 10085
    }
   ]
  },
  "realistic_chance": {
   "itm": {
-   "test_from": "2025-11-19",
-   "n_test": 27043,
-   "brier_market": 0.12369558333241287,
-   "brier_realistic": 0.12165608095313808
+   "test_from": "2025-11-21",
+   "n_test": 27163,
+   "brier_market": 0.12330366042991461,
+   "brier_realistic": 0.12131288216756926
   },
   "profit": {
-   "test_from": "2025-11-19",
-   "n_test": 27043,
-   "brier_market": 0.17295426735983419,
-   "brier_realistic": 0.17189217835944837
+   "test_from": "2025-11-21",
+   "n_test": 27163,
+   "brier_market": 0.17294565582821012,
+   "brier_realistic": 0.17192876082162442
   }
  },
  "trade_score": {
-  "oos_trades": 66045,
-  "spearman": 0.5137854254709349,
+  "oos_trades": 66405,
+  "spearman": 0.5091939832904547,
   "ratings": [
    {
     "rating": "avoid",
-    "trades": 13208,
-    "days": 543,
-    "win_rate": 0.0360387644,
-    "itm_rate": 0.0451241672,
-    "avg_prob_itm": 0.0955931977,
-    "return_per_dollar": -0.4849873079,
-    "ci_low": -0.6428697378,
-    "ci_high": -0.2992608594,
-    "ex_best_day": -0.5823400103,
+    "trades": 13280,
+    "days": 545,
+    "win_rate": 0.0384036145,
+    "itm_rate": 0.0472891566,
+    "avg_prob_itm": 0.0961374812,
+    "return_per_dollar": -0.448656804,
+    "ci_low": -0.6184455889,
+    "ci_high": -0.2588193785,
+    "ex_best_day": -0.5351505494,
     "label": "Avoid"
    },
    {
     "rating": "poor",
-    "trades": 13209,
-    "days": 552,
-    "win_rate": 0.1694299341,
-    "itm_rate": 0.2474070709,
-    "avg_prob_itm": 0.2856246904,
-    "return_per_dollar": -0.1531568005,
-    "ci_low": -0.2594301865,
-    "ci_high": -0.0484853591,
-    "ex_best_day": -0.1903899731,
+    "trades": 13281,
+    "days": 555,
+    "win_rate": 0.1679843385,
+    "itm_rate": 0.2471199458,
+    "avg_prob_itm": 0.2844692608,
+    "return_per_dollar": -0.1563722486,
+    "ci_low": -0.2603811019,
+    "ci_high": -0.0460548384,
+    "ex_best_day": -0.1925280908,
     "label": "Poor odds"
    },
    {
     "rating": "typical",
-    "trades": 39628,
-    "days": 553,
-    "win_rate": 0.3852074291,
-    "itm_rate": 0.734177854,
-    "avg_prob_itm": 0.7055164848,
-    "return_per_dollar": -0.0502066757,
-    "ci_low": -0.0741487712,
-    "ci_high": -0.022652766,
-    "ex_best_day": -0.0607509924,
+    "trades": 39844,
+    "days": 556,
+    "win_rate": 0.3852273868,
+    "itm_rate": 0.7335608875,
+    "avg_prob_itm": 0.7057242433,
+    "return_per_dollar": -0.04984724,
+    "ci_low": -0.0728427287,
+    "ci_high": -0.0257785784,
+    "ex_best_day": -0.060440696,
     "label": "Typical 0DTE trade"
    }
   ],
   "within_group": [
    {
     "within": "lower third",
-    "trades": 22037,
-    "days": 531,
-    "win_rate": 0.2697735626,
-    "itm_rate": 0.4908109089,
-    "avg_prob_itm": 0.4931250406,
-    "return_per_dollar": -0.0567842881,
-    "ci_low": -0.1107366296,
-    "ci_high": 0.0047419141,
-    "ex_best_day": -0.0754476573
+    "trades": 22154,
+    "days": 524,
+    "win_rate": 0.2733592128,
+    "itm_rate": 0.4912431164,
+    "avg_prob_itm": 0.4928496512,
+    "return_per_dollar": -0.0563349606,
+    "ci_low": -0.105636677,
+    "ci_high": -0.0110327972,
+    "ex_best_day": -0.0750465044
    },
    {
     "within": "middle",
-    "trades": 21994,
-    "days": 546,
-    "win_rate": 0.2794853142,
-    "itm_rate": 0.5053196326,
-    "avg_prob_itm": 0.5015104322,
-    "return_per_dollar": -0.0749589087,
-    "ci_low": -0.1018385317,
-    "ci_high": -0.0494149186,
-    "ex_best_day": -0.0795620012
+    "trades": 22114,
+    "days": 549,
+    "win_rate": 0.2777878267,
+    "itm_rate": 0.5074613367,
+    "avg_prob_itm": 0.5019418235,
+    "return_per_dollar": -0.0566359816,
+    "ci_low": -0.0920823842,
+    "ci_high": -0.021779013,
+    "ex_best_day": -0.0716584001
    },
    {
     "within": "upper third",
-    "trades": 22014,
-    "days": 536,
-    "win_rate": 0.2674207323,
-    "itm_rate": 0.5009539384,
-    "avg_prob_itm": 0.5040611333,
-    "return_per_dollar": -0.0708054137,
-    "ci_low": -0.1187168469,
-    "ci_high": -0.0099004813,
-    "ex_best_day": -0.0890642302
+    "trades": 22137,
+    "days": 542,
+    "win_rate": 0.2661155531,
+    "itm_rate": 0.49839635,
+    "avg_prob_itm": 0.5039113744,
+    "return_per_dollar": -0.0862097408,
+    "ci_low": -0.1306305981,
+    "ci_high": -0.0355387361,
+    "ex_best_day": -0.0994771067
    }
   ],
   "ml_ratio_within_group": [
    {
     "mlr": "ML: smaller move",
-    "trades": 22037,
-    "days": 400,
-    "win_rate": 0.2634206108,
-    "itm_rate": 0.4980714253,
-    "avg_prob_itm": 0.4983059843,
-    "return_per_dollar": -0.0974190267,
-    "ci_low": -0.1392239982,
-    "ci_high": -0.0541642341,
-    "ex_best_day": -0.117978167
+    "trades": 22154,
+    "days": 423,
+    "win_rate": 0.2585988986,
+    "itm_rate": 0.4970659926,
+    "avg_prob_itm": 0.4977809043,
+    "return_per_dollar": -0.1100734689,
+    "ci_low": -0.1476428018,
+    "ci_high": -0.0645372761,
+    "ex_best_day": -0.129987779
    },
    {
     "mlr": "about equal",
-    "trades": 21994,
-    "days": 456,
-    "win_rate": 0.2781667728,
-    "itm_rate": 0.4985905247,
-    "avg_prob_itm": 0.4997564674,
-    "return_per_dollar": -0.0426538266,
-    "ci_low": -0.0925237783,
-    "ci_high": 0.0149847422,
-    "ex_best_day": -0.0693064653
+    "trades": 22114,
+    "days": 470,
+    "win_rate": 0.281088903,
+    "itm_rate": 0.4999095596,
+    "avg_prob_itm": 0.4998774631,
+    "return_per_dollar": -0.0212587113,
+    "ci_low": -0.0819654582,
+    "ci_high": 0.0416051617,
+    "ex_best_day": -0.0518967945
    },
    {
     "mlr": "ML: bigger move",
-    "trades": 22014,
-    "days": 356,
-    "win_rate": 0.2750976651,
-    "itm_rate": 0.5004088307,
-    "avg_prob_itm": 0.5006271479,
-    "return_per_dollar": -0.0583762279,
-    "ci_low": -0.0871906949,
-    "ci_high": -0.0236629787,
-    "ex_best_day": -0.0707303788
+    "trades": 22137,
+    "days": 374,
+    "win_rate": 0.2775895559,
+    "itm_rate": 0.5001129331,
+    "avg_prob_itm": 0.5010385499,
+    "return_per_dollar": -0.0618935904,
+    "ci_low": -0.0861457976,
+    "ci_high": -0.0364701397,
+    "ex_best_day": -0.0680840909
    }
   ],
   "features": [
@@ -884,84 +891,865 @@
    "log_price"
   ]
  },
+ "strategy_lab": {
+  "short_straddle": {
+   "all": [
+    {
+     "all": "all entries",
+     "trades": 4062,
+     "days": 680,
+     "win_rate": 0.6666666667,
+     "itm_rate": 0.6666666667,
+     "avg_prob_itm": null,
+     "return_per_dollar": 0.1130363104,
+     "ci_low": 0.0600973414,
+     "ci_high": 0.1668689799,
+     "ex_best_day": 0.1096024973,
+     "gross_return": 0.1246273633,
+     "avg_pnl_contract": 24.7671344165,
+     "worst_trade_contract": -3900.48,
+     "worst_day": "2025-04-09",
+     "ex_worst_day": 0.1300910127,
+     "verdict": "Worked after costs"
+    }
+   ],
+   "by_ml_gate": [
+    {
+     "ml_gate": "ML: smaller move (sell)",
+     "trades": 1529,
+     "days": 458,
+     "win_rate": 0.7063440157,
+     "itm_rate": 0.7063440157,
+     "avg_prob_itm": null,
+     "return_per_dollar": 0.1880457338,
+     "ci_low": 0.1215659282,
+     "ci_high": 0.2451331077,
+     "ex_best_day": 0.1820214168,
+     "gross_return": 0.1992005485,
+     "avg_pnl_contract": 46.1698888162,
+     "worst_trade_contract": -3353.92,
+     "worst_day": "2024-12-18",
+     "ex_worst_day": 0.2130418319,
+     "verdict": "Worked after costs"
+    },
+    {
+     "ml_gate": "ML \u2248 market",
+     "trades": 1440,
+     "days": 507,
+     "win_rate": 0.6451388889,
+     "itm_rate": 0.6451388889,
+     "avg_prob_itm": null,
+     "return_per_dollar": 0.0425276283,
+     "ci_low": -0.0498154073,
+     "ci_high": 0.1125033352,
+     "ex_best_day": 0.0375064026,
+     "gross_return": 0.0541032417,
+     "avg_pnl_contract": 9.1678819444,
+     "worst_trade_contract": -3900.48,
+     "worst_day": "2025-04-09",
+     "ex_worst_day": 0.0776586101,
+     "verdict": "Positive after costs, but within the range of luck"
+    },
+    {
+     "ml_gate": "ML: bigger move",
+     "trades": 1092,
+     "days": 330,
+     "win_rate": 0.6391941392,
+     "itm_rate": 0.6391941392,
+     "avg_prob_itm": null,
+     "return_per_dollar": 0.0809937246,
+     "ci_low": 0.0164033725,
+     "ci_high": 0.1386645774,
+     "ex_best_day": 0.0746486118,
+     "gross_return": 0.0934152819,
+     "avg_pnl_contract": 15.1117216117,
+     "worst_trade_contract": -1739.95,
+     "worst_day": "2026-03-09",
+     "ex_worst_day": 0.0934926906,
+     "verdict": "Worked after costs"
+    }
+   ],
+   "by_time": [
+    {
+     "time": "10:00",
+     "trades": 678,
+     "days": 678,
+     "win_rate": 0.6268436578,
+     "itm_rate": 0.6268436578,
+     "avg_prob_itm": null,
+     "return_per_dollar": 0.0594312808,
+     "ci_low": 0.0029312371,
+     "ci_high": 0.1147835177,
+     "ex_best_day": 0.0565479018,
+     "gross_return": 0.0697140576,
+     "avg_pnl_contract": 18.0867699115,
+     "worst_trade_contract": -3007.43,
+     "worst_day": "2025-04-09",
+     "ex_worst_day": 0.0744866315,
+     "verdict": "Worked after costs"
+    },
+    {
+     "time": "11:00",
+     "trades": 679,
+     "days": 679,
+     "win_rate": 0.6303387334,
+     "itm_rate": 0.6303387334,
+     "avg_prob_itm": null,
+     "return_per_dollar": 0.0811351018,
+     "ci_low": 0.0110330812,
+     "ci_high": 0.1440056031,
+     "ex_best_day": 0.0749366759,
+     "gross_return": 0.0917535301,
+     "avg_pnl_contract": 21.0387776141,
+     "worst_trade_contract": -3900.48,
+     "worst_day": "2025-04-09",
+     "ex_worst_day": 0.1039593634,
+     "verdict": "Worked after costs"
+    },
+    {
+     "time": "12:00",
+     "trades": 679,
+     "days": 679,
+     "win_rate": 0.646539028,
+     "itm_rate": 0.646539028,
+     "avg_prob_itm": null,
+     "return_per_dollar": 0.089315148,
+     "ci_low": 0.0224184887,
+     "ci_high": 0.1602509006,
+     "ex_best_day": 0.0861081733,
+     "gross_return": 0.1003977738,
+     "avg_pnl_contract": 20.5430338733,
+     "worst_trade_contract": -3795.51,
+     "worst_day": "2025-04-09",
+     "ex_worst_day": 0.1143073022,
+     "verdict": "Worked after costs"
+    },
+    {
+     "time": "13:00",
+     "trades": 678,
+     "days": 678,
+     "win_rate": 0.6887905605,
+     "itm_rate": 0.6887905605,
+     "avg_prob_itm": null,
+     "return_per_dollar": 0.1430113058,
+     "ci_low": 0.0763500876,
+     "ci_high": 0.2078325935,
+     "ex_best_day": 0.1396041372,
+     "gross_return": 0.1547022127,
+     "avg_pnl_contract": 29.4365929204,
+     "worst_trade_contract": -3353.92,
+     "worst_day": "2025-04-09",
+     "ex_worst_day": 0.1681079413,
+     "verdict": "Worked after costs"
+    },
+    {
+     "time": "14:00",
+     "trades": 674,
+     "days": 674,
+     "win_rate": 0.7136498516,
+     "itm_rate": 0.7136498516,
+     "avg_prob_itm": null,
+     "return_per_dollar": 0.1984189269,
+     "ci_low": 0.1373736896,
+     "ci_high": 0.2481327581,
+     "ex_best_day": 0.1929453143,
+     "gross_return": 0.2113661473,
+     "avg_pnl_contract": 34.8671364985,
+     "worst_trade_contract": -1603.69,
+     "worst_day": "2024-12-18",
+     "ex_worst_day": 0.2124368633,
+     "verdict": "Worked after costs"
+    },
+    {
+     "time": "15:00",
+     "trades": 674,
+     "days": 674,
+     "win_rate": 0.6943620178,
+     "itm_rate": 0.6943620178,
+     "avg_prob_itm": null,
+     "return_per_dollar": 0.1781704884,
+     "ci_low": 0.121253358,
+     "ci_high": 0.2285018371,
+     "ex_best_day": 0.1738372807,
+     "gross_return": 0.1934647548,
+     "avg_pnl_contract": 24.7014243323,
+     "worst_trade_contract": -962.89,
+     "worst_day": "2026-07-29",
+     "ex_worst_day": 0.1890539333,
+     "verdict": "Worked after costs"
+    }
+   ],
+   "by_event": [
+    {
+     "event": "CPI",
+     "trades": 186,
+     "days": 31,
+     "win_rate": 0.7311827957,
+     "itm_rate": 0.7311827957,
+     "avg_prob_itm": null,
+     "return_per_dollar": 0.2458372052,
+     "ci_low": 0.0332019001,
+     "ci_high": 0.4184307172,
+     "ex_best_day": 0.1843747285,
+     "gross_return": 0.2573288118,
+     "avg_pnl_contract": 56.9507526882,
+     "worst_trade_contract": -999.4,
+     "worst_day": "2024-09-11",
+     "ex_worst_day": 0.3299024403,
+     "verdict": "Worked after costs"
+    },
+    {
+     "event": "FOMC",
+     "trades": 119,
+     "days": 20,
+     "win_rate": 0.7058823529,
+     "itm_rate": 0.7058823529,
+     "avg_prob_itm": null,
+     "return_per_dollar": 0.1216986462,
+     "ci_low": -0.3337596907,
+     "ci_high": 0.4465323511,
+     "ex_best_day": 0.078898466,
+     "gross_return": 0.131817833,
+     "avg_pnl_contract": 47.1702521008,
+     "worst_trade_contract": -1723.49,
+     "worst_day": "2024-12-18",
+     "ex_worst_day": 0.3290957123,
+     "verdict": "Positive after costs, but within the range of luck"
+    },
+    {
+     "event": "FOMC+CPI",
+     "trades": 6,
+     "days": 1,
+     "win_rate": 1.0,
+     "itm_rate": 1.0,
+     "avg_prob_itm": null,
+     "return_per_dollar": 0.5263569661,
+     "ci_low": 0.5263569661,
+     "ci_high": 0.5263569661,
+     "ex_best_day": null,
+     "gross_return": 0.5365487493,
+     "avg_pnl_contract": 165.9533333333,
+     "worst_trade_contract": 146.84,
+     "worst_day": "2024-06-12",
+     "ex_worst_day": null,
+     "verdict": "Too few days to tell"
+    },
+    {
+     "event": "no event",
+     "trades": 3751,
+     "days": 628,
+     "win_rate": 0.6616902159,
+     "itm_rate": 0.6616902159,
+     "avg_prob_itm": null,
+     "return_per_dollar": 0.1043949629,
+     "ci_low": 0.0536694765,
+     "ci_high": 0.1562383524,
+     "ex_best_day": 0.1012643248,
+     "gross_return": 0.1160796693,
+     "avg_pnl_contract": 22.2346787523,
+     "worst_trade_contract": -3900.48,
+     "worst_day": "2025-04-09",
+     "ex_worst_day": 0.1233436161,
+     "verdict": "Worked after costs"
+    }
+   ],
+   "costs": [
+    {
+     "mult": 0,
+     "return": 0.12462736334854693
+    },
+    {
+     "mult": 1,
+     "return": 0.11303631043485589
+    },
+    {
+     "mult": 2,
+     "return": 0.10144525752116486
+    }
+   ]
+  },
+  "short_condor": {
+   "all": [
+    {
+     "all": "all entries",
+     "trades": 4018,
+     "days": 678,
+     "win_rate": 0.8098556496,
+     "itm_rate": 0.8098556496,
+     "avg_prob_itm": null,
+     "return_per_dollar": 0.0313499724,
+     "ci_low": 0.0182836834,
+     "ci_high": 0.0455310039,
+     "ex_best_day": 0.0308386746,
+     "gross_return": 0.05494448,
+     "avg_pnl_contract": 5.3249601792,
+     "worst_trade_contract": -196.0,
+     "worst_day": "2024-05-31",
+     "ex_worst_day": 0.0328710546,
+     "verdict": "Worked after costs"
+    }
+   ],
+   "by_ml_gate": [
+    {
+     "ml_gate": "ML: smaller move (sell)",
+     "trades": 1512,
+     "days": 455,
+     "win_rate": 0.835978836,
+     "itm_rate": 0.835978836,
+     "avg_prob_itm": null,
+     "return_per_dollar": 0.0665114371,
+     "ci_low": 0.0444736121,
+     "ci_high": 0.0880347922,
+     "ex_best_day": 0.0654174622,
+     "gross_return": 0.0906148258,
+     "avg_pnl_contract": 11.0665806878,
+     "worst_trade_contract": -188.0,
+     "worst_day": "2024-12-18",
+     "ex_worst_day": 0.0705198895,
+     "verdict": "Worked after costs"
+    },
+    {
+     "ml_gate": "ML \u2248 market",
+     "trades": 1425,
+     "days": 503,
+     "win_rate": 0.7929824561,
+     "itm_rate": 0.7929824561,
+     "avg_prob_itm": null,
+     "return_per_dollar": 0.012333742,
+     "ci_low": -0.0090470476,
+     "ci_high": 0.0329070805,
+     "ex_best_day": 0.0113158342,
+     "gross_return": 0.0358954889,
+     "avg_pnl_contract": 2.0989684211,
+     "worst_trade_contract": -196.0,
+     "worst_day": "2024-09-11",
+     "ex_worst_day": 0.0156445355,
+     "verdict": "Positive after costs, but within the range of luck"
+    },
+    {
+     "ml_gate": "ML: bigger move",
+     "trades": 1080,
+     "days": 327,
+     "win_rate": 0.7953703704,
+     "itm_rate": 0.7953703704,
+     "avg_prob_itm": null,
+     "return_per_dollar": 0.0086538845,
+     "ci_low": -0.0157636972,
+     "ci_high": 0.0319824801,
+     "ex_best_day": 0.0073819489,
+     "gross_return": 0.0316089189,
+     "avg_pnl_contract": 1.5083240741,
+     "worst_trade_contract": -188.0,
+     "worst_day": "2026-04-13",
+     "ex_worst_day": 0.0133189611,
+     "verdict": "Positive after costs, but within the range of luck"
+    }
+   ],
+   "by_time": [
+    {
+     "time": "10:00",
+     "trades": 667,
+     "days": 667,
+     "win_rate": 0.7631184408,
+     "itm_rate": 0.7631184408,
+     "avg_prob_itm": null,
+     "return_per_dollar": 0.019131319,
+     "ci_low": -0.0110064681,
+     "ci_high": 0.0491367118,
+     "ex_best_day": 0.0184868642,
+     "gross_return": 0.0442052144,
+     "avg_pnl_contract": 3.0588305847,
+     "worst_trade_contract": -180.0,
+     "worst_day": "2024-07-10",
+     "ex_worst_day": 0.0208543772,
+     "verdict": "Positive after costs, but within the range of luck"
+    },
+    {
+     "time": "11:00",
+     "trades": 673,
+     "days": 673,
+     "win_rate": 0.7741456166,
+     "itm_rate": 0.7741456166,
+     "avg_prob_itm": null,
+     "return_per_dollar": 0.031664808,
+     "ci_low": 0.0058423733,
+     "ci_high": 0.0585677476,
+     "ex_best_day": 0.0310780795,
+     "gross_return": 0.0560641354,
+     "avg_pnl_contract": 5.2050371471,
+     "worst_trade_contract": -185.0,
+     "worst_day": "2024-07-10",
+     "ex_worst_day": 0.0333929331,
+     "verdict": "Worked after costs"
+    },
+    {
+     "time": "12:00",
+     "trades": 673,
+     "days": 673,
+     "win_rate": 0.7904903418,
+     "itm_rate": 0.7904903418,
+     "avg_prob_itm": null,
+     "return_per_dollar": 0.0245307564,
+     "ci_low": 0.0031942271,
+     "ci_high": 0.0462035577,
+     "ex_best_day": 0.0239883522,
+     "gross_return": 0.0484050828,
+     "avg_pnl_contract": 4.1201337296,
+     "worst_trade_contract": -183.0,
+     "worst_day": "2024-04-04",
+     "ex_worst_day": 0.0261921187,
+     "verdict": "Worked after costs"
+    },
+    {
+     "time": "13:00",
+     "trades": 669,
+     "days": 669,
+     "win_rate": 0.8251121076,
+     "itm_rate": 0.8251121076,
+     "avg_prob_itm": null,
+     "return_per_dollar": 0.0454288902,
+     "ci_low": 0.0255050717,
+     "ci_high": 0.065935742,
+     "ex_best_day": 0.0448766318,
+     "gross_return": 0.0689024524,
+     "avg_pnl_contract": 7.7600896861,
+     "worst_trade_contract": -187.0,
+     "worst_day": "2024-04-04",
+     "ex_worst_day": 0.0471424001,
+     "verdict": "Worked after costs"
+    },
+    {
+     "time": "14:00",
+     "trades": 668,
+     "days": 668,
+     "win_rate": 0.8547904192,
+     "itm_rate": 0.8547904192,
+     "avg_prob_itm": null,
+     "return_per_dollar": 0.0382546327,
+     "ci_low": 0.0205729127,
+     "ci_high": 0.0552595548,
+     "ex_best_day": 0.0376987974,
+     "gross_return": 0.0611054489,
+     "avg_pnl_contract": 6.7060628743,
+     "worst_trade_contract": -188.0,
+     "worst_day": "2024-04-04",
+     "ex_worst_day": 0.0399241828,
+     "verdict": "Worked after costs"
+    },
+    {
+     "time": "15:00",
+     "trades": 668,
+     "days": 668,
+     "win_rate": 0.8517964072,
+     "itm_rate": 0.8517964072,
+     "avg_prob_itm": null,
+     "return_per_dollar": 0.0282172374,
+     "ci_low": 0.013626036,
+     "ci_high": 0.040810317,
+     "ex_best_day": 0.0277699798,
+     "gross_return": 0.0503420961,
+     "avg_pnl_contract": 5.1024850299,
+     "worst_trade_contract": -196.0,
+     "worst_day": "2024-07-12",
+     "ex_worst_day": 0.0298883377,
+     "verdict": "Worked after costs"
+    }
+   ],
+   "by_event": [
+    {
+     "event": "CPI",
+     "trades": 185,
+     "days": 31,
+     "win_rate": 0.8324324324,
+     "itm_rate": 0.8324324324,
+     "avg_prob_itm": null,
+     "return_per_dollar": 0.0548299682,
+     "ci_low": -0.0144476456,
+     "ci_high": 0.1137614971,
+     "ex_best_day": 0.0455835129,
+     "gross_return": 0.0785880621,
+     "avg_pnl_contract": 9.3150810811,
+     "worst_trade_contract": -173.0,
+     "worst_day": "2024-09-11",
+     "ex_worst_day": 0.0823975948,
+     "verdict": "Positive after costs, but within the range of luck"
+    },
+    {
+     "event": "FOMC",
+     "trades": 118,
+     "days": 20,
+     "win_rate": 0.7796610169,
+     "itm_rate": 0.7796610169,
+     "avg_prob_itm": null,
+     "return_per_dollar": 0.061774473,
+     "ci_low": -0.1247573622,
+     "ci_high": 0.2061039437,
+     "ex_best_day": 0.0451558675,
+     "gross_return": 0.0885687059,
+     "avg_pnl_contract": 9.2238135593,
+     "worst_trade_contract": -168.0,
+     "worst_day": "2024-12-18",
+     "ex_worst_day": 0.1217484585,
+     "verdict": "Positive after costs, but within the range of luck"
+    },
+    {
+     "event": "FOMC+CPI",
+     "trades": 6,
+     "days": 1,
+     "win_rate": 1.0,
+     "itm_rate": 1.0,
+     "avg_prob_itm": null,
+     "return_per_dollar": 0.2658227848,
+     "ci_low": 0.2658227848,
+     "ci_high": 0.2658227848,
+     "ex_best_day": null,
+     "gross_return": 0.2911392405,
+     "avg_pnl_contract": 42.0,
+     "worst_trade_contract": 31.0,
+     "worst_day": "2024-06-12",
+     "ex_worst_day": null,
+     "verdict": "Too few days to tell"
+    },
+    {
+     "event": "no event",
+     "trades": 3709,
+     "days": 626,
+     "win_rate": 0.8093825829,
+     "itm_rate": 0.8093825829,
+     "avg_prob_itm": null,
+     "return_per_dollar": 0.0289842105,
+     "ci_low": 0.0165212209,
+     "ci_high": 0.0435192405,
+     "ex_best_day": 0.0284293504,
+     "gross_return": 0.0524788731,
+     "avg_pnl_contract": 4.9425694257,
+     "worst_trade_contract": -196.0,
+     "worst_day": "2024-05-31",
+     "ex_worst_day": 0.030621734,
+     "verdict": "Worked after costs"
+    }
+   ],
+   "costs": [
+    {
+     "mult": 0,
+     "return": 0.05494447995633585
+    },
+    {
+     "mult": 1,
+     "return": 0.0313499724350394
+    },
+    {
+     "mult": 2,
+     "return": 0.007755464913742938
+    }
+   ]
+  },
+  "breakeven_condor": {
+   "by_variant_time": [
+    {
+     "variant": "held to 4 PM",
+     "time": "09:45",
+     "trades": 454,
+     "days": 454,
+     "win_rate": 0.859030837,
+     "itm_rate": 0.859030837,
+     "avg_prob_itm": null,
+     "return_per_dollar": 0.0072007561,
+     "ci_low": -0.011814637,
+     "ci_high": 0.0256951703,
+     "ex_best_day": 0.0068623989,
+     "gross_return": 0.0217464437,
+     "avg_pnl_contract": 1.9801762115,
+     "worst_trade_contract": -287.0,
+     "worst_day": "2024-04-04",
+     "ex_worst_day": 0.0095214393,
+     "verdict": "Positive after costs, but within the range of luck"
+    },
+    {
+     "variant": "held to 4 PM",
+     "time": "10:00",
+     "trades": 506,
+     "days": 506,
+     "win_rate": 0.8695652174,
+     "itm_rate": 0.8695652174,
+     "avg_prob_itm": null,
+     "return_per_dollar": 0.0117078457,
+     "ci_low": -0.0041489196,
+     "ci_high": 0.0280278547,
+     "ex_best_day": 0.0113330841,
+     "gross_return": 0.0262323198,
+     "avg_pnl_contract": 3.2243083004,
+     "worst_trade_contract": -283.0,
+     "worst_day": "2025-10-10",
+     "ex_worst_day": 0.0137666465,
+     "verdict": "Positive after costs, but within the range of luck"
+    },
+    {
+     "variant": "with breakeven stops",
+     "time": "09:45",
+     "trades": 454,
+     "days": 454,
+     "win_rate": 0.3127753304,
+     "itm_rate": 0.3127753304,
+     "avg_prob_itm": null,
+     "return_per_dollar": -0.0122480136,
+     "ci_low": -0.0185238032,
+     "ci_high": -0.0062189782,
+     "ex_best_day": -0.0126263323,
+     "gross_return": 0.0077854671,
+     "avg_pnl_contract": -3.3681497797,
+     "worst_trade_contract": -88.0,
+     "worst_day": "2024-06-28",
+     "ex_worst_day": -0.0115681742,
+     "verdict": "Worked only before trading costs"
+    },
+    {
+     "variant": "with breakeven stops",
+     "time": "10:00",
+     "trades": 506,
+     "days": 506,
+     "win_rate": 0.3339920949,
+     "itm_rate": 0.3339920949,
+     "avg_prob_itm": null,
+     "return_per_dollar": -0.0091354206,
+     "ci_low": -0.0150410895,
+     "ci_high": -0.0028515446,
+     "ex_best_day": -0.0094543219,
+     "gross_return": 0.0106996003,
+     "avg_pnl_contract": -2.5158695652,
+     "worst_trade_contract": -86.23,
+     "worst_day": "2025-05-21",
+     "ex_worst_day": -0.0085331569,
+     "verdict": "Worked only before trading costs"
+    }
+   ],
+   "by_vix": [
+    {
+     "variant": "held to 4 PM",
+     "vix_regime": "VIX > 19",
+     "trades": 55,
+     "days": 55,
+     "win_rate": 0.8363636364,
+     "itm_rate": 0.8363636364,
+     "avg_prob_itm": null,
+     "return_per_dollar": 0.0045890134,
+     "ci_low": -0.0537698933,
+     "ci_high": 0.0625023168,
+     "ex_best_day": 0.0016481253,
+     "gross_return": 0.0194358213,
+     "avg_pnl_contract": 1.2363636364,
+     "worst_trade_contract": -266.0,
+     "worst_day": "2025-11-20",
+     "ex_worst_day": 0.0229521715,
+     "verdict": "Positive after costs, but within the range of luck"
+    },
+    {
+     "variant": "held to 4 PM",
+     "vix_regime": "VIX \u2264 19",
+     "trades": 399,
+     "days": 399,
+     "win_rate": 0.8621553885,
+     "itm_rate": 0.8621553885,
+     "avg_prob_itm": null,
+     "return_per_dollar": 0.0075524857,
+     "ci_low": -0.0143377142,
+     "ci_high": 0.0267427976,
+     "ex_best_day": 0.0071784501,
+     "gross_return": 0.0220576206,
+     "avg_pnl_contract": 2.0827067669,
+     "worst_trade_contract": -287.0,
+     "worst_day": "2024-04-04",
+     "ex_worst_day": 0.0101874379,
+     "verdict": "Positive after costs, but within the range of luck"
+    },
+    {
+     "variant": "with breakeven stops",
+     "vix_regime": "VIX > 19",
+     "trades": 55,
+     "days": 55,
+     "win_rate": 0.2363636364,
+     "itm_rate": 0.2363636364,
+     "avg_prob_itm": null,
+     "return_per_dollar": -0.0278148198,
+     "ci_low": -0.0492769146,
+     "ci_high": -0.0054185648,
+     "ex_best_day": -0.0313253674,
+     "gross_return": -0.0064786071,
+     "avg_pnl_contract": -7.4938181818,
+     "worst_trade_contract": -76.04,
+     "worst_day": "2024-09-11",
+     "ex_worst_day": -0.0230946819,
+     "verdict": "Did not work"
+    },
+    {
+     "variant": "with breakeven stops",
+     "vix_regime": "VIX \u2264 19",
+     "trades": 399,
+     "days": 399,
+     "win_rate": 0.3233082707,
+     "itm_rate": 0.3233082707,
+     "avg_prob_itm": null,
+     "return_per_dollar": -0.010151595,
+     "ci_low": -0.0171421161,
+     "ci_high": -0.0035136325,
+     "ex_best_day": -0.0105400383,
+     "gross_return": 0.0097064437,
+     "avg_pnl_contract": -2.7994486216,
+     "worst_trade_contract": -88.0,
+     "worst_day": "2024-06-28",
+     "ex_worst_day": -0.0093748178,
+     "verdict": "Worked only before trading costs"
+    }
+   ],
+   "stop_rate": 0.6760416666666667
+  },
+  "momentum": {
+   "underlying": {
+    "all days": {
+     "days": 2209,
+     "hit_rate": 0.4907197827071073,
+     "avg_bp": -0.148824853110765,
+     "ci_low_bp": -1.2587750226088188,
+     "ci_high_bp": 1.150637473489722,
+     "corr": 0.04312711853731146
+    },
+    "strong 10:00 move": {
+     "days": 724,
+     "hit_rate": 0.4903314917127072,
+     "avg_bp": -1.469055864102888,
+     "ci_low_bp": -4.1639934735977295,
+     "ci_high_bp": 1.0502388253919348,
+     "corr": 0.06045602479192546
+    },
+    "since 2024 (0DTE era)": {
+     "days": 702,
+     "hit_rate": 0.4886039886039886,
+     "avg_bp": -0.1267084270014803,
+     "ci_low_bp": -1.616444707161293,
+     "ci_high_bp": 1.2135840738623893,
+     "corr": -0.046591308267695156
+    }
+   },
+   "options": [
+    {
+     "all": "every day",
+     "trades": 674,
+     "days": 674,
+     "win_rate": 0.2863501484,
+     "itm_rate": 0.2863501484,
+     "avg_prob_itm": null,
+     "return_per_dollar": -0.2258761069,
+     "ci_low": -0.3099813302,
+     "ci_high": -0.1403260555,
+     "ex_best_day": -0.241178639,
+     "gross_return": -0.2086610274,
+     "avg_pnl_contract": -13.5335311573,
+     "worst_trade_contract": -262.6,
+     "worst_day": "2025-04-07",
+     "ex_worst_day": -0.2208092601,
+     "verdict": "Did not work"
+    }
+   ],
+   "options_strong": [
+    {
+     "all": "strong 10:00 move",
+     "trades": 227,
+     "days": 227,
+     "win_rate": 0.2643171806,
+     "itm_rate": 0.2643171806,
+     "avg_prob_itm": null,
+     "return_per_dollar": -0.3348153309,
+     "ci_low": -0.4606705169,
+     "ci_high": -0.1946625662,
+     "ex_best_day": -0.3755409289,
+     "gross_return": -0.3194134626,
+     "avg_pnl_contract": -22.9902643172,
+     "worst_trade_contract": -262.6,
+     "worst_day": "2025-04-07",
+     "ex_worst_day": -0.3234167315,
+     "verdict": "Did not work"
+    }
+   ]
+  }
+ },
  "exits": {
   "rules": [
    {
     "rule": "by1530",
-    "trades": 80646,
-    "days": 677,
-    "win_rate": 0.2996304838,
-    "itm_rate": 0.498462416,
-    "avg_prob_itm": 0.4990090227,
-    "return_per_dollar": -0.0316121164,
-    "ci_low": -0.0520061533,
-    "ci_high": -0.0089093533,
-    "ex_best_day": -0.0410674377,
+    "trades": 81006,
+    "days": 680,
+    "win_rate": 0.2998666765,
+    "itm_rate": 0.4984692492,
+    "avg_prob_itm": 0.4990134267,
+    "return_per_dollar": -0.0307613203,
+    "ci_low": -0.0520310611,
+    "ci_high": -0.0074257869,
+    "ex_best_day": -0.0401714886,
     "label": "Sell by 3:30 PM"
    },
    {
     "rule": "hold",
-    "trades": 80646,
-    "days": 677,
-    "win_rate": 0.2719911713,
-    "itm_rate": 0.498462416,
-    "avg_prob_itm": 0.4990090227,
-    "return_per_dollar": -0.0647290335,
-    "ci_low": -0.0880783078,
-    "ci_high": -0.0365211647,
-    "ex_best_day": -0.0753299461,
+    "trades": 81006,
+    "days": 680,
+    "win_rate": 0.27215268,
+    "itm_rate": 0.4984692492,
+    "avg_prob_itm": 0.4990134267,
+    "return_per_dollar": -0.0640382387,
+    "ci_low": -0.0895997579,
+    "ci_high": -0.0392724395,
+    "ex_best_day": -0.0745897268,
     "label": "Hold to 4 PM"
    },
    {
     "rule": "sl50",
-    "trades": 80646,
-    "days": 677,
-    "win_rate": 0.2283560251,
-    "itm_rate": 0.498462416,
-    "avg_prob_itm": 0.4990090227,
-    "return_per_dollar": -0.0375425512,
-    "ci_low": -0.0611785366,
-    "ci_high": -0.0149307986,
-    "ex_best_day": -0.0455572083,
+    "trades": 81006,
+    "days": 680,
+    "win_rate": 0.2284028344,
+    "itm_rate": 0.4984692492,
+    "avg_prob_itm": 0.4990134267,
+    "return_per_dollar": -0.0369200276,
+    "ci_low": -0.0609063978,
+    "ci_high": -0.013474605,
+    "ex_best_day": -0.044896861,
     "label": "Cut losses at \u221250%"
    },
    {
     "rule": "tp100",
-    "trades": 80646,
-    "days": 677,
-    "win_rate": 0.3538923195,
-    "itm_rate": 0.498462416,
-    "avg_prob_itm": 0.4990090227,
-    "return_per_dollar": -0.0604417143,
-    "ci_low": -0.0694949899,
-    "ci_high": -0.0509453945,
-    "ex_best_day": -0.0621988986,
+    "trades": 81006,
+    "days": 680,
+    "win_rate": 0.3540478483,
+    "itm_rate": 0.4984692492,
+    "avg_prob_itm": 0.4990134267,
+    "return_per_dollar": -0.0603342301,
+    "ci_low": -0.0702831868,
+    "ci_high": -0.0506184715,
+    "ex_best_day": -0.0620834797,
     "label": "Take profit at +100%"
    },
    {
     "rule": "tp100_sl50",
-    "trades": 80646,
-    "days": 677,
-    "win_rate": 0.2925129579,
-    "itm_rate": 0.498462416,
-    "avg_prob_itm": 0.4990090227,
-    "return_per_dollar": -0.0367739151,
-    "ci_low": -0.0457023418,
-    "ci_high": -0.0280465509,
-    "ex_best_day": -0.0380491417,
+    "trades": 81006,
+    "days": 680,
+    "win_rate": 0.2926326445,
+    "itm_rate": 0.4984692492,
+    "avg_prob_itm": 0.4990134267,
+    "return_per_dollar": -0.0365895376,
+    "ci_low": -0.0448278338,
+    "ci_high": -0.0288502732,
+    "ex_best_day": -0.0378585909,
     "label": "+100% profit or \u221250% loss"
    },
    {
     "rule": "tp50",
-    "trades": 80646,
-    "days": 677,
-    "win_rate": 0.4302135258,
-    "itm_rate": 0.498462416,
-    "avg_prob_itm": 0.4990090227,
-    "return_per_dollar": -0.056814425,
-    "ci_low": -0.0634081054,
-    "ci_high": -0.0496180779,
-    "ex_best_day": -0.0583889463,
+    "trades": 81006,
+    "days": 680,
+    "win_rate": 0.4304989754,
+    "itm_rate": 0.4984692492,
+    "avg_prob_itm": 0.4990134267,
+    "return_per_dollar": -0.0567496217,
+    "ci_low": -0.0642162305,
+    "ci_high": -0.0496177339,
+    "ex_best_day": -0.058317115,
     "label": "Take profit at +50%"
    }
   ],
@@ -969,270 +1757,270 @@
    {
     "group": "far out of the money (0.5+ moves)",
     "rule": "by1530",
-    "trades": 29348,
-    "days": 677,
-    "win_rate": 0.1328199537,
-    "itm_rate": 0.0891713234,
-    "avg_prob_itm": 0.1368045267,
-    "return_per_dollar": -0.1537606317,
-    "ci_low": -0.2328699778,
-    "ci_high": -0.0724470728,
-    "ex_best_day": -0.1757567206,
+    "trades": 29471,
+    "days": 680,
+    "win_rate": 0.1331139086,
+    "itm_rate": 0.0892742018,
+    "avg_prob_itm": 0.1368183846,
+    "return_per_dollar": -0.1490121297,
+    "ci_low": -0.2341243751,
+    "ci_high": -0.0664560221,
+    "ex_best_day": -0.1709070674,
     "label": "Sell by 3:30 PM"
    },
    {
     "group": "far out of the money (0.5+ moves)",
     "rule": "hold",
-    "trades": 29348,
-    "days": 677,
-    "win_rate": 0.0713166144,
-    "itm_rate": 0.0891713234,
-    "avg_prob_itm": 0.1368045267,
-    "return_per_dollar": -0.3404545903,
-    "ci_low": -0.4413505483,
-    "ci_high": -0.2290521585,
-    "ex_best_day": -0.3838869157,
+    "trades": 29471,
+    "days": 680,
+    "win_rate": 0.0714940111,
+    "itm_rate": 0.0892742018,
+    "avg_prob_itm": 0.1368183846,
+    "return_per_dollar": -0.3366615798,
+    "ci_low": -0.4469248377,
+    "ci_high": -0.2197854311,
+    "ex_best_day": -0.379905011,
     "label": "Hold to 4 PM"
    },
    {
     "group": "far out of the money (0.5+ moves)",
     "rule": "sl50",
-    "trades": 29348,
-    "days": 677,
-    "win_rate": 0.0438189996,
-    "itm_rate": 0.0891713234,
-    "avg_prob_itm": 0.1368045267,
-    "return_per_dollar": -0.1666430123,
-    "ci_low": -0.2413706603,
-    "ci_high": -0.0873625905,
-    "ex_best_day": -0.2018044192,
+    "trades": 29471,
+    "days": 680,
+    "win_rate": 0.0439415018,
+    "itm_rate": 0.0892742018,
+    "avg_prob_itm": 0.1368183846,
+    "return_per_dollar": -0.1642889553,
+    "ci_low": -0.23883568,
+    "ci_high": -0.0801463354,
+    "ex_best_day": -0.1992988302,
     "label": "Cut losses at \u221250%"
    },
    {
     "group": "far out of the money (0.5+ moves)",
     "rule": "tp100",
-    "trades": 29348,
-    "days": 677,
-    "win_rate": 0.2277156876,
-    "itm_rate": 0.0891713234,
-    "avg_prob_itm": 0.1368045267,
-    "return_per_dollar": -0.2586974665,
-    "ci_low": -0.2916954023,
-    "ci_high": -0.2257046268,
-    "ex_best_day": -0.2624008262,
+    "trades": 29471,
+    "days": 680,
+    "win_rate": 0.2279529029,
+    "itm_rate": 0.0892742018,
+    "avg_prob_itm": 0.1368183846,
+    "return_per_dollar": -0.2585507094,
+    "ci_low": -0.2908757489,
+    "ci_high": -0.227547331,
+    "ex_best_day": -0.2622383624,
     "label": "Take profit at +100%"
    },
    {
     "group": "far out of the money (0.5+ moves)",
     "rule": "tp100_sl50",
-    "trades": 29348,
-    "days": 677,
-    "win_rate": 0.1561264822,
-    "itm_rate": 0.0891713234,
-    "avg_prob_itm": 0.1368045267,
-    "return_per_dollar": -0.133454891,
-    "ci_low": -0.1534630824,
-    "ci_high": -0.1112801261,
-    "ex_best_day": -0.1353799804,
+    "trades": 29471,
+    "days": 680,
+    "win_rate": 0.1564928235,
+    "itm_rate": 0.0892742018,
+    "avg_prob_itm": 0.1368183846,
+    "return_per_dollar": -0.1329877512,
+    "ci_low": -0.1537858876,
+    "ci_high": -0.1149232407,
+    "ex_best_day": -0.1349040568,
     "label": "+100% profit or \u221250% loss"
    },
    {
     "group": "far out of the money (0.5+ moves)",
     "rule": "tp50",
-    "trades": 29348,
-    "days": 677,
-    "win_rate": 0.3146040616,
-    "itm_rate": 0.0891713234,
-    "avg_prob_itm": 0.1368045267,
-    "return_per_dollar": -0.2251153786,
-    "ci_low": -0.2504888332,
-    "ci_high": -0.2025647682,
-    "ex_best_day": -0.2284473342,
+    "trades": 29471,
+    "days": 680,
+    "win_rate": 0.3150215466,
+    "itm_rate": 0.0892742018,
+    "avg_prob_itm": 0.1368183846,
+    "return_per_dollar": -0.224380682,
+    "ci_low": -0.2503725575,
+    "ci_high": -0.2007832757,
+    "ex_best_day": -0.2276975488,
     "label": "Take profit at +50%"
    },
    {
     "group": "in the money",
     "rule": "by1530",
-    "trades": 40197,
-    "days": 677,
-    "win_rate": 0.4225439709,
-    "itm_rate": 0.8303355972,
-    "avg_prob_itm": 0.7897395143,
-    "return_per_dollar": -0.0255236932,
-    "ci_low": -0.0378650525,
-    "ci_high": -0.0126785855,
-    "ex_best_day": -0.0310281536,
+    "trades": 40377,
+    "days": 680,
+    "win_rate": 0.4226663695,
+    "itm_rate": 0.8301508284,
+    "avg_prob_itm": 0.7897033773,
+    "return_per_dollar": -0.0250075669,
+    "ci_low": -0.0369045715,
+    "ci_high": -0.0099136092,
+    "ex_best_day": -0.0304860921,
     "label": "Sell by 3:30 PM"
    },
    {
     "group": "in the money",
     "rule": "hold",
-    "trades": 40197,
-    "days": 677,
-    "win_rate": 0.4234146827,
-    "itm_rate": 0.8303355972,
-    "avg_prob_itm": 0.7897395143,
-    "return_per_dollar": -0.0412341438,
-    "ci_low": -0.0546196994,
-    "ci_high": -0.0247175763,
-    "ex_best_day": -0.0473092203,
+    "trades": 40377,
+    "days": 680,
+    "win_rate": 0.4234836664,
+    "itm_rate": 0.8301508284,
+    "avg_prob_itm": 0.7897033773,
+    "return_per_dollar": -0.0408246701,
+    "ci_low": -0.0547895801,
+    "ci_high": -0.023362366,
+    "ex_best_day": -0.0468716462,
     "label": "Hold to 4 PM"
    },
    {
     "group": "in the money",
     "rule": "sl50",
-    "trades": 40197,
-    "days": 677,
-    "win_rate": 0.3785108341,
-    "itm_rate": 0.8303355972,
-    "avg_prob_itm": 0.7897395143,
-    "return_per_dollar": -0.0285777883,
-    "ci_low": -0.0433203757,
-    "ci_high": -0.0129022189,
-    "ex_best_day": -0.0331950114,
+    "trades": 40377,
+    "days": 680,
+    "win_rate": 0.3784332665,
+    "itm_rate": 0.8301508284,
+    "avg_prob_itm": 0.7897033773,
+    "return_per_dollar": -0.0280728857,
+    "ci_low": -0.0436288318,
+    "ci_high": -0.0107252542,
+    "ex_best_day": -0.0326681187,
     "label": "Cut losses at \u221250%"
    },
    {
     "group": "in the money",
     "rule": "tp100",
-    "trades": 40197,
-    "days": 677,
-    "win_rate": 0.4416996293,
-    "itm_rate": 0.8303355972,
-    "avg_prob_itm": 0.7897395143,
-    "return_per_dollar": -0.042271053,
-    "ci_low": -0.0487936544,
-    "ci_high": -0.0348399382,
-    "ex_best_day": -0.0435277559,
+    "trades": 40377,
+    "days": 680,
+    "win_rate": 0.4417613988,
+    "itm_rate": 0.8301508284,
+    "avg_prob_itm": 0.7897033773,
+    "return_per_dollar": -0.0421892618,
+    "ci_low": -0.0488330689,
+    "ci_high": -0.0354000753,
+    "ex_best_day": -0.0434402604,
     "label": "Take profit at +100%"
    },
    {
     "group": "in the money",
     "rule": "tp100_sl50",
-    "trades": 40197,
-    "days": 677,
-    "win_rate": 0.3961240889,
-    "itm_rate": 0.8303355972,
-    "avg_prob_itm": 0.7897395143,
-    "return_per_dollar": -0.0296304447,
-    "ci_low": -0.0370730492,
-    "ci_high": -0.0224823524,
-    "ex_best_day": -0.0304854825,
+    "trades": 40377,
+    "days": 680,
+    "win_rate": 0.3960423013,
+    "itm_rate": 0.8301508284,
+    "avg_prob_itm": 0.7897033773,
+    "return_per_dollar": -0.0294580592,
+    "ci_low": -0.0370652312,
+    "ci_high": -0.0237350834,
+    "ex_best_day": -0.0303088916,
     "label": "+100% profit or \u221250% loss"
    },
    {
     "group": "in the money",
     "rule": "tp50",
-    "trades": 40197,
-    "days": 677,
-    "win_rate": 0.4972012837,
-    "itm_rate": 0.8303355972,
-    "avg_prob_itm": 0.7897395143,
-    "return_per_dollar": -0.0416161455,
-    "ci_low": -0.0471217055,
-    "ci_high": -0.0354124591,
-    "ex_best_day": -0.0428577835,
+    "trades": 40377,
+    "days": 680,
+    "win_rate": 0.4973375932,
+    "itm_rate": 0.8301508284,
+    "avg_prob_itm": 0.7897033773,
+    "return_per_dollar": -0.0416190711,
+    "ci_low": -0.0476651632,
+    "ci_high": -0.0353769388,
+    "ex_best_day": -0.0428552519,
     "label": "Take profit at +50%"
    },
    {
     "group": "near the money (0\u20130.5 moves out)",
     "rule": "by1530",
-    "trades": 11101,
-    "days": 677,
-    "win_rate": 0.2955589587,
-    "itm_rate": 0.3787947032,
-    "avg_prob_itm": 0.4038359732,
-    "return_per_dollar": -0.0203924644,
-    "ci_low": -0.1111736902,
-    "ci_high": 0.0821318442,
-    "ex_best_day": -0.0765698567,
+    "trades": 11158,
+    "days": 680,
+    "win_rate": 0.2959311705,
+    "itm_rate": 0.3790105754,
+    "avg_prob_itm": 0.4037510097,
+    "return_per_dollar": -0.0184718726,
+    "ci_low": -0.1133387272,
+    "ci_high": 0.092940182,
+    "ex_best_day": -0.0743811755,
     "label": "Sell by 3:30 PM"
    },
    {
     "group": "near the money (0\u20130.5 moves out)",
     "rule": "hold",
-    "trades": 11101,
-    "days": 677,
-    "win_rate": 0.2542113323,
-    "itm_rate": 0.3787947032,
-    "avg_prob_itm": 0.4038359732,
-    "return_per_dollar": -0.1393196749,
-    "ci_low": -0.251903087,
-    "ci_high": -0.0106698608,
-    "ex_best_day": -0.2045268795,
+    "trades": 11158,
+    "days": 680,
+    "win_rate": 0.2545259007,
+    "itm_rate": 0.3790105754,
+    "avg_prob_itm": 0.4037510097,
+    "return_per_dollar": -0.1376819182,
+    "ci_low": -0.2487390614,
+    "ci_high": -0.0119198738,
+    "ex_best_day": -0.2025901487,
     "label": "Hold to 4 PM"
    },
    {
     "group": "near the money (0\u20130.5 moves out)",
     "rule": "sl50",
-    "trades": 11101,
-    "days": 677,
-    "win_rate": 0.1725069814,
-    "itm_rate": 0.3787947032,
-    "avg_prob_itm": 0.4038359732,
-    "return_per_dollar": -0.0516056483,
-    "ci_low": -0.1463348647,
-    "ci_high": 0.0344585708,
-    "ex_best_day": -0.1000410717,
+    "trades": 11158,
+    "days": 680,
+    "win_rate": 0.1727012009,
+    "itm_rate": 0.3790105754,
+    "avg_prob_itm": 0.4037510097,
+    "return_per_dollar": -0.0508439032,
+    "ci_low": -0.1361058691,
+    "ci_high": 0.0528168257,
+    "ex_best_day": -0.0990666355,
     "label": "Cut losses at \u221250%"
    },
    {
     "group": "near the money (0\u20130.5 moves out)",
     "rule": "tp100",
-    "trades": 11101,
-    "days": 677,
-    "win_rate": 0.3695162598,
-    "itm_rate": 0.3787947032,
-    "avg_prob_itm": 0.4038359732,
-    "return_per_dollar": -0.1271599863,
-    "ci_low": -0.163099793,
-    "ci_high": -0.0955337022,
-    "ex_best_day": -0.1343146439,
+    "trades": 11158,
+    "days": 680,
+    "win_rate": 0.3696899086,
+    "itm_rate": 0.3790105754,
+    "avg_prob_itm": 0.4037510097,
+    "return_per_dollar": -0.1268663581,
+    "ci_low": -0.1579166253,
+    "ci_high": -0.0932777369,
+    "ex_best_day": -0.1339901389,
     "label": "Take profit at +100%"
    },
    {
     "group": "near the money (0\u20130.5 moves out)",
     "rule": "tp100_sl50",
-    "trades": 11101,
-    "days": 677,
-    "win_rate": 0.2779028916,
-    "itm_rate": 0.3787947032,
-    "avg_prob_itm": 0.4038359732,
-    "return_per_dollar": -0.0517106291,
-    "ci_low": -0.0775500243,
-    "ci_high": -0.0266676275,
-    "ex_best_day": -0.0570258376,
+    "trades": 11158,
+    "days": 680,
+    "win_rate": 0.2780068113,
+    "itm_rate": 0.3790105754,
+    "avg_prob_itm": 0.4037510097,
+    "return_per_dollar": -0.0515926756,
+    "ci_low": -0.07544869,
+    "ci_high": -0.0293184495,
+    "ex_best_day": -0.056884992,
     "label": "+100% profit or \u221250% loss"
    },
    {
     "group": "near the money (0\u20130.5 moves out)",
     "rule": "tp50",
-    "trades": 11101,
-    "days": 677,
-    "win_rate": 0.4932888929,
-    "itm_rate": 0.3787947032,
-    "avg_prob_itm": 0.4038359732,
-    "return_per_dollar": -0.1111267693,
-    "ci_low": -0.133268622,
-    "ci_high": -0.0904557667,
-    "ex_best_day": -0.1164256742,
+    "trades": 11158,
+    "days": 680,
+    "win_rate": 0.4936368525,
+    "itm_rate": 0.3790105754,
+    "avg_prob_itm": 0.4037510097,
+    "return_per_dollar": -0.1108159597,
+    "ci_low": -0.1321401287,
+    "ci_high": -0.0872993425,
+    "ex_best_day": -0.11609131,
     "label": "Take profit at +50%"
    }
   ],
   "hold_vs_sell_all": [
    {
     "all": "all",
-    "trades": 588117,
-    "days": 677,
-    "win_rate": 0.2792352542,
-    "itm_rate": 0.5367146333,
+    "trades": 591255,
+    "days": 680,
+    "win_rate": 0.2793058832,
+    "itm_rate": 0.5366939814,
     "avg_prob_itm": null,
-    "return_per_dollar": -0.0476045145,
-    "ci_low": -0.0612707016,
-    "ci_high": -0.0327293095,
-    "ex_best_day": -0.054920768
+    "return_per_dollar": -0.0474759577,
+    "ci_low": -0.0614099222,
+    "ci_high": -0.0332150327,
+    "ex_best_day": -0.0547468294
    }
   ],
-  "states": 588117
+  "states": 591255
  }
 }

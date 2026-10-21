@@ -6,6 +6,7 @@ Endpoints:
   GET /api/check?type=call&strike=772      the full trade check (+ optional &premium=0.31)
   GET /api/scan?type=call                  quick rating of every strike near SPY (compare strikes)
   GET /api/spy                             SPY 5-minute bars for the current/last session (the price chart)
+  GET /api/strategies                      Strategy Lab: today's live setups + backtest results
   GET /research.json                       backtest + model results (made by scripts/run_research.py)
 """
 import json
@@ -25,6 +26,7 @@ from fastapi.staticfiles import StaticFiles
 
 from checker.history_check import SESSION_MINUTES, history_check, verdict
 from checker import decision as decision_engine
+from checker import strategy_signals
 from checker.scenarios import scenario_grid
 from checker.trade_check import HOURS_PER_YEAR, check_trade
 from core.expiry import ET, MINUTES_PER_YEAR, is_market_hours, minutes_to_expiry
@@ -123,8 +125,8 @@ def model_check(m: MarketSnapshot, trade) -> dict | None:
     bundle = _model["bundle"]
     if bundle is None or not is_market_hours(m.as_of) or trade.minutes_left > SESSION_MINUTES:
         return None
-    bars, vix_prev = live_inputs()
-    feats = live_forecast.live_features(bars, vix_prev, m.as_of)
+    bars, vix_prev, vix1d_prev = live_inputs()
+    feats = live_forecast.live_features(bars, vix_prev, m.as_of, vix1d_prev)
     if feats is None:
         return None
     f = live_forecast.forecast(bundle, feats, m.spot)
@@ -240,7 +242,7 @@ def api_spy():
     """Today's session so far (or the last full session when closed), for the price chart."""
     m = market()
     try:
-        bars, _ = live_inputs()
+        bars = live_inputs()[0]
     except Exception as e:
         raise HTTPException(503, f"SPY bars unavailable: {e}") from e
     days = sorted(set(bars.index.date))
@@ -257,6 +259,30 @@ def api_spy():
         "last": m.spot if live else (float(session["close"].iloc[-1]) if len(session) else None),
         "now": m.as_of.astimezone(ET).strftime("%H:%M") if live else None,
         "expected": {"low": em["low"], "high": em["high"], "move": em["move"]} if em else None,
+    })
+
+
+@app.get("/api/strategies")
+def api_strategies():
+    m = market()
+    em = expected_move(m.chain, m.spot, m.T, m.r)
+    live = is_market_hours(m.as_of) and minutes_to_expiry(m.as_of, m.expiry) <= SESSION_MINUTES
+    ml_vol, bars, notes = None, None, list(m.notes)
+    if live:
+        try:
+            bars, vix_prev, vix1d_prev = live_inputs()
+            feats = live_forecast.live_features(bars, vix_prev, m.as_of, vix1d_prev)
+            if feats is not None and _model["bundle"] is not None:
+                ml_vol = live_forecast.forecast(_model["bundle"], feats, m.spot)["vol"]
+        except Exception as e:
+            notes.append(f"ML forecast unavailable ({type(e).__name__}).")
+    sig = strategy_signals.signals(m, em, ml_vol, bars, live)
+    return jsonable({
+        "market": {"spot": m.spot, "expiry": m.expiry, "as_of": m.as_of, "live": live,
+                   "minutes_left": minutes_to_expiry(m.as_of, m.expiry)},
+        "signals": sig,
+        "lab": (_insights or {}).get("strategy_lab"),
+        "notes": notes, "disclaimer": DISCLAIMER,
     })
 
 

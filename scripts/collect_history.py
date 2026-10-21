@@ -19,6 +19,8 @@ if __name__ == "__main__":
     print("VIX daily…", flush=True)
     vix = archive.update_vix()
     print(f"  {len(vix):,} days")
+    print("VIX1D daily…", flush=True)
+    print(f"  {len(archive.update_vix1d()):,} days")
     print("0DTE option bars (one file per day)…", flush=True)
     n = archive.update_options()
     print(f"  fetched {n} new days; {len(archive.option_days())} days on disk")

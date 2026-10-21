@@ -135,8 +135,9 @@ def _y(df: pd.DataFrame) -> np.ndarray:
 class MoveModel:
     """Predicts RV to the close. kind: 'seasonal' | 'har' | 'gbm'."""
 
-    def __init__(self, kind: str = "gbm"):
+    def __init__(self, kind: str = "gbm", extra_features: tuple = ()):
         self.kind = kind
+        self.extra = tuple(extra_features)   # optional inputs, e.g. ("vix1d_prev",); gbm handles missing values
         self.scale = 1.0      # bias correction: E[RV] vs exp(E[log RV])
         if kind == "gbm":
             self.est = HistGradientBoostingRegressor(max_iter=400, learning_rate=0.04, max_leaf_nodes=24,
@@ -148,19 +149,21 @@ class MoveModel:
         if self.kind == "seasonal":
             # time-of-day RV, scaled by how volatile the last week was vs the last month
             return np.log(df["rv_tod"] * (df["rv_5d"] / df["rv_22d"]) + EPS).to_numpy()
-        X = _X(df)
-        if self.kind == "har":
-            X = X.drop(columns=["dow"])
-        return self.est.predict(X)
+        return self.est.predict(self._features(df))
 
     def fit(self, df: pd.DataFrame) -> "MoveModel":
         if self.kind != "seasonal":
-            X = _X(df)
-            if self.kind == "har":
-                X = X.drop(columns=["dow"])
-            self.est.fit(X, _y(df))
+            self.est.fit(self._features(df), _y(df))
         self.scale = float(df["rv_rest"].mean() / np.exp(self._raw(df)).mean())
         return self
+
+    def _features(self, df: pd.DataFrame) -> pd.DataFrame:
+        X = _X(df)
+        if self.kind == "har":
+            X = X.drop(columns=["dow"])
+        for c in self.extra:
+            X[c] = df[c].to_numpy() if c in df else np.nan
+        return X
 
     def predict_rv(self, df: pd.DataFrame) -> np.ndarray:
         return np.exp(self._raw(df)) * self.scale
@@ -187,8 +190,10 @@ def score(rv: np.ndarray, ret: np.ndarray, pred_rv: np.ndarray) -> dict:
     }
 
 
-def walk_forward(data: pd.DataFrame, kinds=("seasonal", "har", "gbm"), first_test_year: int = 2020) -> pd.DataFrame:
-    """For each year Y: train on everything before Y, predict Y. Returns out-of-sample predictions."""
+def walk_forward(data: pd.DataFrame, kinds=("seasonal", "har", "gbm"), first_test_year: int = 2020,
+                 variants: dict | None = None) -> pd.DataFrame:
+    """For each year Y: train on everything before Y, predict Y. Returns out-of-sample predictions.
+    variants: extra named models, e.g. {"gbm_vix1d": ("gbm", ("vix1d_prev",))}."""
     data = data.copy()
     years = sorted({d.year for d in data["date"]})
     out = []
@@ -197,5 +202,9 @@ def walk_forward(data: pd.DataFrame, kinds=("seasonal", "har", "gbm"), first_tes
         test = data[[d.year == y for d in data["date"]]].copy()
         for k in kinds:
             test[f"pred_{k}"] = MoveModel(k).fit(train).predict_rv(test)
+        for name, (kind, extra) in (variants or {}).items():
+            # an input that didn't exist yet in the training years (e.g. VIX1D before 2023) can't be learned
+            usable = all(train[c].notna().any() for c in extra if c in train)
+            test[f"pred_{name}"] = MoveModel(kind, extra).fit(train).predict_rv(test) if usable else np.nan
         out.append(test)
     return pd.concat(out, ignore_index=True)

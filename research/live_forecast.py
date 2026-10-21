@@ -27,7 +27,7 @@ def decision_time(now: datetime) -> time | None:
     return t if time(9, 35) <= t <= time(15, 55) else None
 
 
-def live_features(bars: pd.DataFrame, vix_prev: float, now: datetime) -> dict | None:
+def live_features(bars: pd.DataFrame, vix_prev: float, now: datetime, vix1d_prev: float | None = None) -> dict | None:
     """bars: 5-min bars (index = bar start, ET; columns open/high/low/close) for recent days incl. today."""
     t = decision_time(now)
     if t is None:
@@ -36,7 +36,10 @@ def live_features(bars: pd.DataFrame, vix_prev: float, now: datetime) -> dict | 
     past_groups = [g for d, g in bars.groupby(bars.index.date) if d < today and g.index[-1].time() >= time(15, 55)]
     today_bars = bars[bars.index.date == today]
     past = [day_stats(g, times=[]) for g in past_groups]
-    return features_at(today_bars, t, past, [rv_from_time(g, t) for g in past_groups], vix_prev, today)
+    f = features_at(today_bars, t, past, [rv_from_time(g, t) for g in past_groups], vix_prev, today)
+    if f is not None:
+        f["vix1d_prev"] = vix1d_prev / 100 if vix1d_prev else float("nan")   # same units as training
+    return f
 
 
 def forecast(bundle: dict, features: dict, spot: float) -> dict:
@@ -54,7 +57,7 @@ def forecast(bundle: dict, features: dict, spot: float) -> dict:
     }
 
 
-def fetch_live_inputs(symbol: str = "SPY") -> tuple[pd.DataFrame, float]:
+def fetch_live_inputs(symbol: str = "SPY") -> tuple[pd.DataFrame, float, float | None]:
     """Recent 5-min bars (incl. today) and VIX at the previous close, from yfinance."""
     import yfinance as yf
 
@@ -68,4 +71,10 @@ def fetch_live_inputs(symbol: str = "SPY") -> tuple[pd.DataFrame, float]:
     vix.index = vix.index.tz_convert(ET).date
     today = datetime.now(ET).date()
     vix_prev = float(vix[vix.index < today].iloc[-1])
-    return bars, vix_prev
+    try:   # VIX1D: previous close only (the index drifts up intraday, so today's value would be biased)
+        v1 = yf.Ticker("^VIX1D").history(period="10d", interval="1d")["Close"]
+        v1.index = v1.index.tz_convert(ET).date
+        vix1d_prev = float(v1[v1.index < today].iloc[-1])
+    except Exception:
+        vix1d_prev = None
+    return bars, vix_prev, vix1d_prev

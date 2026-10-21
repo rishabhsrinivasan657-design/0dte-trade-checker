@@ -29,7 +29,9 @@ from data import archive
 from research import backtest as bt
 from research import exits as ex
 from research import insights as ins
+from data.events import event_type
 from research import move_model as mm
+from research import strategies as sl
 from research import trade_model as tm
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -38,6 +40,10 @@ TRADE_MODEL_FILE = ROOT / "models" / "trade_model.joblib"
 RESULTS_FILE = ROOT / "web" / "research.json"
 INSIGHTS_FILE = ROOT / "models" / "insights.json"
 REBUILD = "--rebuild" in sys.argv
+# The production ML move model. gbm + VIX1D beat plain gbm on the market-matched test (QLIKE 0.287 vs 0.330),
+# so it is the signal used by the trade score, the strategy gate and the live app.
+ML_SIGNAL = "gbm_vix1d"
+ML_EXTRA = ("vix1d_prev",)
 
 
 def cached(path: Path, build):
@@ -60,7 +66,8 @@ def main():
     data = cached(archive.CACHE / "ml_dataset.parquet", lambda: mm.build_dataset(spy, vix))
     data["date"] = pd.to_datetime(data["date"]).dt.date
     print(f"ML dataset: {len(data):,} rows, {data['date'].nunique():,} days")
-    wf = mm.walk_forward(data)
+    data["vix1d_prev"] = [v / 100 for v in archive.previous_close(archive.load_vix1d(), data["date"])]
+    wf = mm.walk_forward(data, variants={"gbm_vix1d": ("gbm", ("vix1d_prev",))})
     by_year = []
     for y, g in wf.groupby([d.year for d in wf["date"]]):
         for k in ("seasonal", "har", "gbm"):
@@ -86,7 +93,7 @@ def main():
     vs = [{"model": "market (ATM implied vol)",
            **mm.score(both["rv_rest"].to_numpy(), both["ret_rest"].to_numpy(), both["implied_rv"].to_numpy())}]
     vs += [{"model": k, **mm.score(both["rv_rest"].to_numpy(), both["ret_rest"].to_numpy(), both[f"pred_{k}"].to_numpy())}
-           for k in ("seasonal", "har", "gbm")]
+           for k in ("seasonal", "har", "gbm", "gbm_vix1d")]
     # simple blend: geometric mean of market and model
     blend = np.sqrt(both["implied_rv"].to_numpy() * both["pred_gbm"].to_numpy())
     vs.append({"model": "blend (market × gbm)", **mm.score(both["rv_rest"].to_numpy(), both["ret_rest"].to_numpy(), blend)})
@@ -98,8 +105,8 @@ def main():
                 .sort_values("dist").groupby(["date", "time", "type"]).head(1)
                 .groupby(["date", "time"]).filter(lambda g: len(g) == 2 and g["strike"].nunique() == 1)
                 .groupby(["date", "time"]).agg(entry=("entry", "sum"), payoff=("payoff", "sum")).reset_index())
-    straddle = straddle.merge(both[["date", "time", "pred_gbm", "implied_rv"]], on=["date", "time"])
-    straddle["ratio"] = np.sqrt(straddle["pred_gbm"] / straddle["implied_rv"])     # model vol / market vol
+    straddle = straddle.merge(both[["date", "time", f"pred_{ML_SIGNAL}", "implied_rv"]], on=["date", "time"])
+    straddle["ratio"] = np.sqrt(straddle[f"pred_{ML_SIGNAL}"] / straddle["implied_rv"])     # model vol / market vol
     straddle["pnl"] = straddle["payoff"] - straddle["entry"]
     straddle["itm"] = straddle["payoff"] > 0
     straddle["prob_itm"] = np.nan
@@ -109,7 +116,7 @@ def main():
     print("\nATM straddles by model/market ratio:\n", straddle_summary.to_string(index=False))
 
     # 5b. Single options: history verdict (v1) and model verdict (v2)
-    hourly = wf[wf["time"].str.endswith(":00")][["date", "time", "pred_gbm", "minutes_left"]]
+    hourly = wf[wf["time"].str.endswith(":00")][["date", "time", f"pred_{ML_SIGNAL}", "minutes_left"]].rename(columns={f"pred_{ML_SIGNAL}": "pred_gbm"})
     t2 = trades.merge(hourly.rename(columns={"minutes_left": "ml"}), on=["date", "time"], how="left")
     sig = np.sqrt(t2["pred_gbm"] / (t2["ml"] / MINUTES_PER_YEAR))
     t2["model_prob"] = [prob_itm(S, K, m / MINUTES_PER_YEAR, bt.RATE, s, cp) if s == s else np.nan
@@ -170,7 +177,7 @@ def main():
     print("\nExit rules (all trades):\n", exit_summary[["label", "trades", "win_rate", "return_per_dollar", "ci_low", "ci_high"]].to_string(index=False))
 
     # 5e. Trade score: ML that rates a specific purchase (walk-forward by month)
-    tsc = tm.add_context(t3, wf, atm)
+    tsc = tm.add_context(t3, wf.assign(pred_gbm=wf[f"pred_{ML_SIGNAL}"]), atm)
     tsc["pred"] = cached(archive.CACHE / "trade_preds.parquet",
                          lambda: tm.walk_forward(tsc).rename("pred").to_frame())["pred"].to_numpy()
     oos = tm.rate_oos(tsc.dropna(subset=["pred"]))
@@ -195,10 +202,49 @@ def main():
                  "oos_spearman": spearman}, TRADE_MODEL_FILE)
     print(f"Saved {TRADE_MODEL_FILE.relative_to(ROOT)}")
 
+    # 5f. Strategy Lab
+    strat = cached(archive.CACHE / "strategies.parquet", lambda: sl.run(spy, archive.load_options, days, progress=True))
+    strat["date"] = pd.to_datetime(strat["date"]).dt.date
+    ctx = wf.assign(pred_gbm=wf[f"pred_{ML_SIGNAL}"])[["date", "time", "pred_gbm", "vix_prev"]].merge(atm[["date", "time", "implied_rv"]], on=["date", "time"])
+    ctx["ml_ratio"] = np.sqrt(ctx["pred_gbm"] / ctx["implied_rv"])
+    strat = strat.merge(ctx[["date", "time", "ml_ratio", "vix_prev"]], on=["date", "time"], how="left")
+    strat["event"] = [event_type(d) or "no event" for d in strat["date"]]
+    strat["ml_gate"] = pd.cut(strat["ml_ratio"], [0, 0.9, 1.1, 10], labels=["ML: smaller move (sell)", "ML ≈ market", "ML: bigger move"])
+    vix_prev_all = archive.previous_close(archive.load_vix(), strat["date"])
+    strat["vix_regime"] = ["VIX > 19" if v > 19 else "VIX ≤ 19" for v in vix_prev_all]
+    S = lambda df, by: records(sl.summary(df, by, bt.summarize))
+    lab = {}
+    for name in ("short_straddle", "short_condor"):
+        g = strat[strat["strategy"] == name]
+        lab[name] = {"all": S(g.assign(all="all entries"), "all"),
+                     "by_ml_gate": S(g.dropna(subset=["ml_gate"]), "ml_gate"),
+                     "by_time": S(g, "time"), "by_event": S(g, "event"),
+                     "costs": [{"mult": m, "return": float((sl.with_costs(g, m)["pnl"].sum()) / g["basis"].sum())} for m in (0, 1, 2)]}
+    be = strat[strat["strategy"] == "breakeven_condor"]
+    lab["breakeven_condor"] = {"by_variant_time": S(be, ["variant", "time"]),
+                               "by_vix": S(be[be["time"] == "09:45"], ["variant", "vix_regime"]),
+                               "stop_rate": float(be.loc[be["variant"] == "with breakeven stops", "stops"].gt(0).mean())}
+    mom_opt = strat[strat["strategy"] == "momentum"]
+    lab["momentum"] = {"underlying": sl.momentum_stats(sl.momentum_table(spy)),
+                       "options": S(mom_opt.assign(all="every day"), "all"),
+                       "options_strong": S(mom_opt[mom_opt["strong"] == True].assign(all="strong 10:00 move"), "all")}
+    for name, block in lab.items():
+        for key, val in block.items():
+            if isinstance(val, list):
+                for r in val:
+                    if "return_per_dollar" in r:
+                        r["verdict"] = sl.verdict(r)
+    print(f"\nStrategy Lab: {len(strat):,} strategy trades")
+    for name in ("short_straddle", "short_condor"):
+        print(f"  {name}:", [(r["ml_gate"], round(r["return_per_dollar"], 4), round(r["gross_return"], 4), r["verdict"]) for r in lab[name]["by_ml_gate"]])
+    print("  breakeven condor:", [(r["variant"], r["time"], round(r["return_per_dollar"], 4), r["verdict"]) for r in lab["breakeven_condor"]["by_variant_time"]])
+    print("  momentum (underlying):", {k: (v["days"], round(v["avg_bp"], 2), round(v["ci_low_bp"], 2), round(v["ci_high_bp"], 2)) for k, v in lab["momentum"]["underlying"].items()})
+    print("  momentum (options):", [(r["all"], round(r["return_per_dollar"], 4), r["verdict"]) for r in lab["momentum"]["options"] + lab["momentum"]["options_strong"]])
+
     # 6. Final model on all data
-    final = mm.MoveModel("gbm").fit(data)
+    final = mm.MoveModel("gbm", ML_EXTRA).fit(data)
     MODEL_FILE.parent.mkdir(exist_ok=True)
-    joblib.dump({"model": final, "features": mm.FEATURES, "trained_through": str(data["date"].max()),
+    joblib.dump({"model": final, "features": mm.FEATURES + list(ML_EXTRA), "trained_through": str(data["date"].max()),
                  "n_rows": len(data)}, MODEL_FILE)
     print(f"\nSaved {MODEL_FILE.relative_to(ROOT)} (trained through {data['date'].max()})")
 
@@ -209,7 +255,7 @@ def main():
         "z_edges": [None if np.isinf(e) else e for e in ins.Z_EDGES],
         "similar": similar, "curves": curves, "curve_eval": curve_eval,
         "model_verdicts": records(model_summary), "all_trades": records(all_summary),
-        "hold_vs_sell": hold_table, "hold_all": records(hold_all),
+        "hold_vs_sell": hold_table, "hold_all": records(hold_all), "strategy_lab": lab,
         "exit_rules": records(exit_summary), "exit_rules_by_group": records(exit_by_group),
     }, indent=1))
     print(f"Saved {INSIGHTS_FILE.relative_to(ROOT)}")
@@ -234,6 +280,7 @@ def main():
         "trade_score": {"oos_trades": len(oos), "spearman": spearman, "ratings": records(rating_summary),
                         "within_group": records(within_summary), "ml_ratio_within_group": records(mlr_summary),
                         "features": tm.FEATURES},
+        "strategy_lab": lab,
         "exits": {"rules": records(exit_summary), "by_group": records(exit_by_group),
                   "hold_vs_sell_all": records(hold_all), "states": len(states)},
     }

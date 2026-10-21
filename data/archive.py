@@ -7,6 +7,7 @@
 Caveat: Alpaca's history for options is trade bars, not bid/ask quotes, and only goes
 back to early 2024. The backtest therefore adds an assumed spread cost on entry.
 """
+import bisect
 import os
 from datetime import date, datetime, time, timedelta
 from math import ceil, floor
@@ -20,6 +21,7 @@ from core.expiry import ET
 CACHE = Path(__file__).parent / "cache"
 SPY_FILE = CACHE / "spy_5m.parquet"
 VIX_FILE = CACHE / "vix_daily.parquet"
+VIX1D_FILE = CACHE / "vix1d_daily.parquet"
 OPTIONS_DIR = CACHE / "options"
 STRIKE_PAD = 6          # collect strikes from (day low - 6) to (day high + 6)
 SYMBOLS_PER_REQUEST = 50
@@ -92,6 +94,32 @@ def update_vix() -> pd.DataFrame:
 
 def load_vix() -> pd.Series:
     return pd.read_parquet(VIX_FILE)["vix"]
+
+
+def update_vix1d() -> pd.Series:
+    """Cboe 1-day VIX (^VIX1D, history from 2023-04-24). Note its known overnight bias: it drifts up in the
+    day and down overnight, so we only ever use the PREVIOUS day's close as a feature."""
+    df = yf.Ticker("^VIX1D").history(period="max", interval="1d")[["Close"]].rename(columns={"Close": "vix1d"})
+    df.index = df.index.tz_convert(ET).date
+    df.index.name = "date"
+    CACHE.mkdir(parents=True, exist_ok=True)
+    df.to_parquet(VIX1D_FILE)
+    return df["vix1d"]
+
+
+def load_vix1d() -> pd.Series:
+    return pd.read_parquet(VIX1D_FILE)["vix1d"]
+
+
+def previous_close(series: pd.Series, days) -> list[float]:
+    """For each day, the series' last value strictly BEFORE that day (no look-ahead)."""
+    s = series.sort_index()
+    idx = list(s.index)
+    out = []
+    for d in days:
+        i = bisect.bisect_left(idx, d) - 1
+        out.append(float(s.iloc[i]) if i >= 0 else float("nan"))
+    return out
 
 
 # ---------------- 0DTE options ----------------

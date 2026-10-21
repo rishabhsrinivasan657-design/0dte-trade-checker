@@ -8,13 +8,14 @@ const NAMES = {
   seasonal: "Time-of-day rule",
   har: "HAR (classic finance model)",
   gbm: "ML model (gradient boosting)",
+  gbm_vix1d: "ML model + VIX1D (used live)",
   "blend (market × gbm)": "Blend: market × ML",
 };
 const COLOR = {
   market: "var(--series-1)", history: "var(--series-2)", model: "var(--series-3)",
   neutral: "var(--muted)",
 };
-const modelColor = (name) => name.startsWith("market") ? COLOR.market : name === "gbm" ? COLOR.model
+const modelColor = (name) => name.startsWith("market") ? COLOR.market : name.startsWith("gbm") ? COLOR.model
   : name.startsWith("blend") ? "color-mix(in srgb, var(--series-1) 50%, var(--series-3))" : COLOR.neutral;
 const cents = (r) => `${r >= 0 ? "+" : "−"}${Math.abs(r * 100).toFixed(0)}¢`;
 const signedPct = (r, d = 0) => `${r >= 0 ? "+" : "−"}${Math.abs(r * 100).toFixed(d)}%`;
@@ -58,7 +59,7 @@ function render(R) {
 // ---------- findings (computed, never hard-coded) ----------
 function renderFindings(R) {
   const s = Object.fromEntries(R.model_vs_market.scores.map((r) => [r.model, r]));
-  const mkt = s["market (ATM implied vol)"], ml = s.gbm, blend = s["blend (market × gbm)"];
+  const mkt = s["market (ATM implied vol)"], ml = s.gbm_vix1d || s.gbm, blend = s["blend (market × gbm)"];
   const better = ml.qlike < mkt.qlike;
   const all = R.backtest.all[0];
   const hv = Object.fromEntries(R.backtest.by_history_verdict.map((r) => [r.verdict, r]));
